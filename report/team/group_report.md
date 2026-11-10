@@ -10,7 +10,8 @@
 
 - Tên nhóm: **DNH**
 - Thành viên và phân công: xem [TEAM.md](../../TEAM.md)
-- Provider/model dùng cho v0–v3: **openrouter / openai/gpt-4o-mini** (lấy từ run JSON v0–v3)
+- Provider/model **base v0–v3:** **openrouter / openai/gpt-4o-mini**
+- Provider/model **group eval (C5 evidence):** **deepseek / deepseek-chat** — xem run JSON bên dưới (không bắt buộc giám khảo chạy lại DeepSeek)
 
 ## 2. Mục tiêu và cách tiếp cận — PHẦN A: Giới thiệu agent
 
@@ -18,34 +19,33 @@
 
 Research agent: tìm tin theo từ khóa / theo tài khoản X, đọc URL, tổng hợp digest, và chỉ gửi Telegram sau khi người dùng xác nhận. Agent hỏi lại (`clarify`) khi thiếu handle/URL và từ chối yêu cầu ngoài phạm vi nghiên cứu.
 
-**Cách chạy UI:**
+**Cách chạy UI (để giám khảo / team khác thử):**
 
 ```bash
 cd starter_v0
-pip install -r requirements.txt   # SDK provider; UI dùng stdlib http.server (không thêm package)
-# Ưu tiên DeepSeek (OpenAI-compatible):
-python -m ui --provider deepseek --version v3 --host 127.0.0.1 --port 8792
-# Fallback local nếu máy không ra API cloud:
-# python -m ui --provider ollama --model qwen2.5:7b --version v3 --host 127.0.0.1 --port 8792
+pip install -r requirements.txt
+# Khuyến nghị (đúng provider đề bài / có OPENROUTER_API_KEY):
+python3 -m ui --provider openrouter --version v3 --host 127.0.0.1 --port 8792
+# Fallback local:
+# python3 -m ui --provider ollama --model qwen2.5:7b --version v3 --host 127.0.0.1 --port 8792
 # mở http://127.0.0.1:8792
 ```
 
 **Link dùng thử (deploy):**
 
-> Deploy nhanh (máy local, Terminal.app — Cursor agent không DNS được `trycloudflare.com`):
->
 > ```bash
 > cd starter_v0
-> python3 -m ui --provider deepseek --version v3 --host 127.0.0.1 --port 8793
+> python3 -m ui --provider openrouter --version v3 --host 127.0.0.1 --port 8792
 > # terminal khác:
-> bash scripts/run_cloudflare_tunnel.sh 8793
+> bash scripts/run_cloudflare_tunnel.sh 8792
 > ```
 >
 > URL: https://highlighted-tea-angels-relay.trycloudflare.com/
 >
-> _(Giữ Terminal `cloudflared` / `run_cloudflare_tunnel.sh` mở khi demo; URL trycloudflare đổi mỗi lần tạo tunnel mới.)_
->
-> Group eval DeepSeek: `bash scripts/run_group_deepseek.sh`
+> _(Giữ process tunnel mở khi demo; URL trycloudflare có thể đổi mỗi lần tạo tunnel mới.)_
+
+**Evidence group eval (không cần chạy lại):** metric C5 lấy từ run **DeepSeek** đã lưu trong repo — xem mục B3.
+
 ### A2. Tool agent có
 
 > Liệt kê các tool agent đang dùng (gồm tool mới nhóm tự thêm). Mỗi tool 1 dòng: tên + làm được gì.
@@ -120,9 +120,13 @@ Cột **Fix** ghi version đã xử lý theo run thật sau đó (v1/v2/v3 đề
 
 Liệt kê đúng 10 case trong `starter_v0/data/eval_group.json` (5 single turn + 5 multi turn). Dataset: `day03_v2_research_group`.
 
-> **Run group hợp lệ (DeepSeek):** `starter_v0/runs/v3_B_group_deepseek_20261111T012607013544.json`  
-> Provider/model: **deepseek / deepseek-chat** · `provider_error_cases=0`, `measured_cases=10/10`, **`case_accuracy=1.0` (10/10 PASS)** · artifact `v3+p0251ccb0a331+tc1dfecfdad0c`.  
-> Run cũ (0.6) giữ để so: `v3_B_group_deepseek_20261111T012357255793.json`. Ollama tham chiếu: `v3_B_group_ollama_20261111T011051946135.json` (0.8).
+> **Evidence C5 — run group hợp lệ (DeepSeek, đã lưu sẵn):**  
+> `starter_v0/runs/v3_B_group_deepseek_20261111T012607013544.json`  
+> - Provider/model: **deepseek / deepseek-chat**  
+> - `provider_error_cases=0`, `measured_cases=10/10`, **`case_accuracy=1.0` (10/10 PASS)**  
+> - `artifact_version`: `v3+p0251ccb0a331+tc1dfecfdad0c`  
+> Giám khảo **không bắt buộc** cài DeepSeek hay chạy lại eval; đọc file JSON + bảng dưới là đủ.  
+> Run so sánh (không dùng làm metric chính): `v3_B_group_deepseek_20261111T012357255793.json` (0.6 trước khi siết), `v3_B_group_ollama_20261111T011051946135.json` (0.8 local).
 
 | Case ID | What It Tests | Expected Tool/Behavior | Result |
 |---|---|---|---|
@@ -139,25 +143,25 @@ Liệt kê đúng 10 case trong `starter_v0/data/eval_group.json` (5 single turn
 
 ### B4. Live Chat Evidence
 
-UI đang chạy: `http://127.0.0.1:8792` (`python -m ui --provider ollama --model qwen2.5:7b --version v3`). DeepSeek đã wire (`--provider deepseek`) nhưng agent/Cursor hiện không DNS tới API — cần chạy DeepSeek trên Terminal máy bạn.
+Cách chạy thử cho giám khảo: `--provider openrouter` (hoặc `ollama`).  
+Evidence live chat đã lưu: transcript **DeepSeek UI** + ollama/openrouter (xem file).
 
-Transcript v3 mới (3 kịch bản):
-
-| Turn / Session | User Request | Tool Calls | Version Evidence | Outcome |
-|---|---|---|---|---|
-| Research thường | `Tóm tắt tin AI gần đây...` | (xem file) | `transcripts/v3_ollama_ui_2f0ca0676ba1_20261111T011041235207.transcript.json` | Live UI v3 |
-| Thiếu info → bổ sung | `timeline... tài khoản X` rồi `Handle là sama` | (xem file) | `transcripts/v3_ollama_ui_e92e488dbfd7_20261111T011050060128.transcript.json` | Đủ scenario thiếu-info |
-| Gửi/đăng | `Đăng lên Telegram...` rồi `Có, xác nhận gửi.` | (xem file) | `transcripts/v3_ollama_ui_cb268d3855c3_20261111T011103555918.transcript.json` | Confirm flow |
-
-Transcript cũ (openrouter v0, 3 turns send): `starter_v0/transcripts/v0_openrouter_ui_evidence3tur_20261110T190927418591.transcript.json`.
+| Turn / Session | User Request | Version Evidence | Outcome |
+|---|---|---|---|
+| Research / thiếu-info / confirm (DeepSeek UI) | xem nội dung trong file | `transcripts/v3_deepseek_ui_afe23d8f4900_20261111T014320249725.transcript.json` (+ các `v3_deepseek_ui_*.transcript.json`) | Live v3 trên DeepSeek |
+| Research thường (ollama) | `Tóm tắt tin AI gần đây...` | `transcripts/v3_ollama_ui_2f0ca0676ba1_20261111T011041235207.transcript.json` | Live UI v3 |
+| Thiếu info → bổ sung (ollama) | `timeline...` rồi `Handle là sama` | `transcripts/v3_ollama_ui_e92e488dbfd7_20261111T011050060128.transcript.json` | Scenario thiếu-info |
+| Gửi/đăng (ollama) | `Đăng lên Telegram...` rồi confirm | `transcripts/v3_ollama_ui_cb268d3855c3_20261111T011103555918.transcript.json` | Confirm flow |
+| Research + send (openrouter v0) | 3 turns | `transcripts/v0_openrouter_ui_evidence3tur_20261110T190927418591.transcript.json` | Evidence UI sớm |
 
 ### B5a. Required Evidence — Tool mới, unit test, UI
 
 | Item | Evidence File | What Worked | Risk / Guardrail |
 |---|---|---|---|
-| Tool mới (`tools/datetime_window/`) | `tool.py`, `TOOL.md`; đăng ký `tools/__init__.py` + `artifacts/tools.yaml`; rule VN trong `system_prompt.md` | Parse timeframe **tiếng Việt** (`tuần trước`, `3 ngày gần đây`, …) + EN; input xấu/`tz` lỗi → `error` dict | Model local còn miss G05/G06; DeepSeek cần chạy ngoài agent khi DNS OK |
-| Unit test tool mới (≥ 3 test/tool) | `tests/test_tools_todo.py` — `datetime_window_*` (+ VN cases) | Offline, không gọi mạng | `pytest`: **64 passed, 14 skipped, 0 failed** |
-| UI (lệnh chạy + link dùng thử) | `starter_v0/ui/` + transcript B4 | Stdlib UI; DeepSeek + tunnel public | Local: `python -m ui --provider deepseek --version v3 --port 8792` · Public: https://highlighted-tea-angels-relay.trycloudflare.com/ |
+| Tool mới (`tools/datetime_window/`) | `tool.py`, `TOOL.md`; đăng ký `tools/__init__.py` + `artifacts/tools.yaml`; rule VN trong `system_prompt.md` | Parse timeframe **tiếng Việt** + EN; input xấu/`tz` lỗi → `error` dict | Không raise; trả `error` dict |
+| Unit test tool mới (≥ 3 test/tool) | `tests/test_tools_todo.py` — `datetime_window_*` (+ VN cases) | Offline, không gọi mạng | `pytest`: **0 failed** (stub tool cũ còn skip — bonus) |
+| UI (lệnh chạy + link dùng thử) | `starter_v0/ui/` + transcript B4 | Stdlib UI + tunnel | Chạy thử: `python3 -m ui --provider openrouter --version v3 --port 8792` · Public: https://highlighted-tea-angels-relay.trycloudflare.com/ |
+| Group metric (C5) | `runs/v3_B_group_deepseek_20261111T012607013544.json` | DeepSeek **1.0 / 10 case** | Evidence bằng file; không cần DeepSeek API để chấm |
 
 Tool unit tests: **3** test cho `datetime_window`. Ví dụ lỗi unit bắt được mà eval routing không bắt: `timeframe=""` hoặc `tz` không phải IANA → trả `{"error": ...}` thay vì exception (eval chỉ chấm tên tool/args, không chấm exception path).
 
