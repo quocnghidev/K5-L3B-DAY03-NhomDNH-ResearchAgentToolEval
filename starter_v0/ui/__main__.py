@@ -1,4 +1,4 @@
-"""python -m ui — http://127.0.0.1:8787"""
+"""python -m ui — http://127.0.0.1:8792"""
 
 from ui.server import main
 

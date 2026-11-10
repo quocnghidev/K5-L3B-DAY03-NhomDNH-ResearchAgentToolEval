@@ -3,11 +3,11 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 REPO="$(cd "$ROOT/.." && pwd)"
 CF="$REPO/.tools/cloudflared"
-PORT="${1:-8793}"
+PORT="${1:-8792}"
 HOST="127.0.0.1"
+PROVIDER="${UI_PROVIDER:-openrouter}"
 
 # Cursor agent shells inject ALL_PROXY → breaks outbound LLM calls (chat → 502).
-# Drop proxy env for UI + tunnel children; keep localhost NO_PROXY harmlessly.
 unset ALL_PROXY HTTP_PROXY HTTPS_PROXY http_proxy https_proxy all_proxy || true
 export NO_PROXY="127.0.0.1,::1,localhost,${NO_PROXY:-}"
 
@@ -22,15 +22,13 @@ if [[ ! -x "$CF" ]]; then
   CF="$REPO/.tools/cloudflared"
 fi
 
-# Ensure UI is up (DeepSeek preferred)
 if ! lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then
-  echo "Starting UI on $HOST:$PORT (deepseek, no proxy)..."
+  echo "Starting UI on $HOST:$PORT ($PROVIDER, no proxy)..."
   cd "$ROOT"
   env -u ALL_PROXY -u HTTP_PROXY -u HTTPS_PROXY -u http_proxy -u https_proxy -u all_proxy \
-    python3 -m ui --provider deepseek --version v3 --host "$HOST" --port "$PORT" &
+    python3 -m ui --provider "$PROVIDER" --version v3 --host "$HOST" --port "$PORT" &
   sleep 1.5
 else
-  # Warn if an already-running UI inherited a broken Cursor sandbox proxy.
   ui_pid="$(lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null | head -1 || true)"
   if [[ -n "${ui_pid}" ]] && ps eww -p "$ui_pid" 2>/dev/null | grep -q 'ALL_PROXY=http://127.0.0.1:'; then
     echo "WARN: UI pid $ui_pid on :$PORT still has ALL_PROXY (Cursor sandbox)."

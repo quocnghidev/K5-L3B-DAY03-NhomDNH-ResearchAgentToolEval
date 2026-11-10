@@ -93,8 +93,8 @@ Báo cáo cá nhân: [report/team/2A202603901_LeThanhHa.md](report/team/2A202603
 ### Phần việc phụ trách
 
 - **C5 — Eval nhóm:** viết đúng 10 case `data/eval_group.json` (5 single + 5 multi; ≥ 1 route tool mới); chạy `--suite group`; lưu run hợp lệ và điền B3
-- **C6 — UI & live chat:** hoàn thiện UI stdlib, live ≥ 3 kịch bản + transcript; deploy Cloudflare Tunnel → URL A1
-- **C7 — Báo cáo nhóm:** lắp Phần A + B3/B4/B5a + mục 5–7 (giữ B1/B2 của Nghị); rà `SUBMISSION.md` / `RULES.md`
+- **C6 — UI & live chat:** UI Gemini-like cũ + live ≥ 3 kịch bản + transcript; Cloudflare Tunnel → URL A1
+- **C7 — Báo cáo nhóm:** lắp/viết lại Phần A + B3/B4/B5a + mục 5–7 (giữ B1/B2 của Nghị); rà `SUBMISSION.md` / `RULES.md`
 - **Hỗ trợ chốt C4 (để nộp):** đăng ký `datetime_window` vào registry/`tools.yaml`, unit test ≥ 3, xoá `dattask` hỏng, Việt hoá prompt/tools phục vụ group eval, siết expect multi-turn đến DeepSeek **1.0**
 
 ### Đóng góp cụ thể
@@ -102,17 +102,15 @@ Báo cáo cá nhân: [report/team/2A202603901_LeThanhHa.md](report/team/2A202603
 - Viết `eval_group.json` G01–G10; siết expect/prompt sau fail DeepSeek 0.6 → **1.0**
 - Run: `starter_v0/runs/v3_B_group_deepseek_20261111T012607013544.json` (`provider_error_cases=0`, 10/10)
 - Đăng ký `datetime_window` (`tools/__init__.py` + `artifacts/tools.yaml`); mở rộng parse timeframe tiếng Việt; ≥ 3 test trong `tests/test_tools_todo.py`; xoá `tools/dattask/`
-- Việt hoá `artifacts/system_prompt.md` + `artifacts/tools.yaml` cho routing group (không map timeframe bắt buộc sang English)
-- UI: commit `4adf5a5`; thêm provider DeepSeek vào UI/`run_eval`/`chat` (dùng local); script `scripts/run_cloudflare_tunnel.sh` + `scripts/run_group_deepseek.sh`
-- Transcript: v0 UI + 3 transcript v3 (research / thiếu-info / confirm-send)
-- Báo cáo: điền A1–A3 (URL tunnel), B3–B5a, reflection; cập nhật `TEAM.md` + `2A202603901_LeThanhHa.md`
+- Việt hoá `artifacts/system_prompt.md` + `artifacts/tools.yaml` cho routing group
+- UI cũ (`starter_v0/ui/`) + `scripts/run_c6_live.py` + tunnel; live openrouter 3 kịch bản C6
+- Báo cáo: A1/B4/B5a/mục 5–7 khớp evidence mới; cập nhật `TEAM.md` + `2A202603901_LeThanhHa.md`
 
 ### Bằng chứng
 
 - `starter_v0/data/eval_group.json`
 - `starter_v0/runs/v3_B_group_deepseek_20261111T012607013544.json` — group **1.0**
 - `starter_v0/tools/datetime_window/` + đăng ký + unit test; pytest 0 failed
-- `starter_v0/transcripts/` (v0 + v3)
-- `report/team/group_report.md` — A1 URL: https://highlighted-tea-angels-relay.trycloudflare.com/
+- Transcript C6: `v3_openrouter_ui_81a96500eb3d_…`, `…fc7e2e73cb96_…`, `…36347f0e1c8a_…`
+- `report/team/group_report.md` — A1 URL: https://referred-michel-reed-inspector.trycloudflare.com/
 - `report/team/2A202603901_LeThanhHa.md`
-- Commit UI: `4adf5a5`

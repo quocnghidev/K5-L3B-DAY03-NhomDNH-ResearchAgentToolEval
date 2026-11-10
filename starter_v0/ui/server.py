@@ -1,7 +1,7 @@
-"""HTTP chat UI — DNH team research agent.
+"""HTTP chat UI (Gemini-like) — cùng tool loop như chat.py, ghi transcript khi có tin đầu.
 
-Static Gemini-like box + POST /api/chat → cùng vòng tool loop như chat.py.
-Chạy từ starter_v0:  python -m ui --provider openrouter --version v3
+Chạy từ starter_v0:
+  python -m ui --provider openrouter --version v3 --host 127.0.0.1 --port 8792
 """
 
 from __future__ import annotations
@@ -53,7 +53,6 @@ TYPES = {
 MAX_BODY = 32_000
 SESSION_RE = re.compile(r"^[A-Za-z0-9_-]{8,64}$")
 
-# Curated OpenRouter ids — đủ chọn trên UI, không cần tải cả catalog.
 OPENROUTER_MODELS = [
     "openai/gpt-4o-mini",
     "openai/gpt-4o",
@@ -150,7 +149,7 @@ def reset_session(session_id: str) -> dict:
         "ok": True,
         "session_id": session_id,
         "transcript": str(session["transcript_path"]),
-        "message": "Đã xóa lịch sử server; transcript mới sẽ ghi khi gửi tin đầu.",
+        "message": "Đã xóa lịch sử; transcript mới ghi khi gửi tin đầu.",
     }
 
 
@@ -186,21 +185,16 @@ def set_model(session: dict[str, Any], model: str, *, require_selectable: bool =
 
 def execute_turn(session: dict[str, Any], user_text: str, model: str | None = None) -> dict:
     history: list[dict[str, str]] = session["history"]
-    system_prompt: str = _CONFIG["system_prompt"]
-    window: int = _CONFIG["history_window"]
     messages = [
-        {"role": "system", "content": system_prompt},
-        *trim_history(history, window),
+        {"role": "system", "content": _CONFIG["system_prompt"]},
+        *trim_history(history, _CONFIG["history_window"]),
         {"role": "user", "content": user_text},
     ]
-
     chosen = (model or "").strip() or session.get("model_arg") or session.get("model")
     if chosen and chosen != session.get("model"):
         set_model(session, chosen)
-
-    turn_index = len(session["transcript"]["turns"]) + 1
     turn_record: dict[str, Any] = {
-        "turn_index": turn_index,
+        "turn_index": len(session["transcript"]["turns"]) + 1,
         "started_at": now_iso(),
         "user": user_text,
         "model": chosen,
@@ -209,7 +203,6 @@ def execute_turn(session: dict[str, Any], user_text: str, model: str | None = No
         "rounds": [],
         "tool_events": [],
     }
-
     result = run_model_tool_loop(
         provider=_CONFIG["provider"],
         messages=messages,
@@ -221,7 +214,6 @@ def execute_turn(session: dict[str, Any], user_text: str, model: str | None = No
     assistant_text = str(result.get("assistant_text") or "")
     history.append({"role": "user", "content": user_text})
     history.append({"role": "assistant", "content": assistant_text})
-
     turn_record["ended_at"] = now_iso()
     session["transcript"]["turns"].append(turn_record)
     write_transcript(session["transcript_path"], session["transcript"])
@@ -242,6 +234,7 @@ def execute_turn(session: dict[str, Any], user_text: str, model: str | None = No
         "model": chosen,
         "session_id": session["session_id"],
         "transcript": str(session["transcript_path"]),
+        "tools": tools_used,
     }
 
 
@@ -256,7 +249,7 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt: str, *args) -> None:
         print(f"ui {self.address_string()} {fmt % args}", flush=True)
 
-    def _session_id_from_request(self, body: dict | None = None) -> str | None:
+    def _session_id(self, body: dict | None = None) -> str | None:
         header = (self.headers.get("X-Session-Id") or "").strip()
         if header:
             return header
@@ -268,7 +261,7 @@ class Handler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
         if path == "/api/health":
             session = None
-            sid = self._session_id_from_request()
+            sid = self._session_id()
             if sid:
                 try:
                     session = get_session(sid)
@@ -299,8 +292,7 @@ class Handler(BaseHTTPRequestHandler):
         body = self._read_json()
         if body is None:
             return
-
-        sid = self._session_id_from_request(body)
+        sid = self._session_id(body)
         if not sid:
             self._send_json(400, {"error": "Thiếu session_id (header X-Session-Id)."})
             return
@@ -339,20 +331,19 @@ class Handler(BaseHTTPRequestHandler):
             return
         model = str(body.get("model") or "").strip() or None
         if not session["lock"].acquire(blocking=False):
-            self._send_json(429, {"error": "Đang xử lý lượt khác trên session này — đợi xong rồi gửi lại."})
+            self._send_json(429, {"error": "Đang xử lý lượt khác — đợi xong rồi gửi lại."})
             return
         try:
             payload = execute_turn(session, text, model=model)
         except Exception as exc:
-            msg = str(exc).strip() or type(exc).__name__
             print(f"chat lỗi: {type(exc).__name__}: {exc}", flush=True)
-            self._send_json(502, {"error": msg})
+            self._send_json(502, {"error": str(exc).strip() or type(exc).__name__})
             return
         finally:
             session["lock"].release()
         print(f"[{sid[:8]}] you: {text}", flush=True)
         print(
-            f"[{sid[:8]}] dnh[{payload.get('model')}]: {payload.get('assistant_text') or '(trống)'}",
+            f"[{sid[:8]}] agent[{payload.get('model')}]: {payload.get('assistant_text') or '(trống)'}",
             flush=True,
         )
         self._send_json(200, payload)
@@ -392,9 +383,6 @@ def _bootstrap(args: argparse.Namespace) -> None:
     artifacts = ROOT / "artifacts"
     system_path = args.system_prompt or (artifacts / "system_prompt.md")
     tools_path = args.tools or (artifacts / "tools.yaml")
-    system_prompt = system_path.read_text(encoding="utf-8")
-    tool_declarations = load_tool_declarations(tools_path)
-    openai_tools = to_openai_tools(tool_declarations)
     provider = make_provider(args.provider)
     selected_model = args.model or getattr(provider, "default_model", None)
     artifact_version = build_artifact_version(args.version, system_path, tools_path)
@@ -409,10 +397,10 @@ def _bootstrap(args: argparse.Namespace) -> None:
             "model": selected_model,
             "model_arg": args.model,
             "version": args.version,
-            "system_prompt": system_prompt,
+            "system_prompt": system_path.read_text(encoding="utf-8"),
             "system_path": system_path,
             "tools_path": tools_path,
-            "openai_tools": openai_tools,
+            "openai_tools": to_openai_tools(load_tool_declarations(tools_path)),
             "history_window": args.history_window,
             "max_tool_rounds": args.max_tool_rounds,
             "artifact_version": artifact_version,
@@ -424,26 +412,24 @@ def _bootstrap(args: argparse.Namespace) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="DNH team chat UI (HTTP).")
+    parser = argparse.ArgumentParser(description="DNH research agent chat UI.")
     parser.add_argument(
         "--provider",
         choices=["openrouter", "openai", "anthropic", "gemini", "ollama"],
         required=True,
     )
     parser.add_argument("--model", default=None)
-    parser.add_argument("--version", required=True, help="Artifact version, e.g. v3")
+    parser.add_argument("--version", required=True)
     parser.add_argument("--system-prompt", type=Path, default=None)
     parser.add_argument("--tools", type=Path, default=None)
     parser.add_argument("--transcripts-dir", type=Path, default=None)
     parser.add_argument("--history-window", type=int, default=5)
     parser.add_argument("--max-tool-rounds", type=int, default=4)
-    # 0.0.0.0 để Cloudflare Tunnel / máy khác trong LAN mở được.
     parser.add_argument("--host", default=os.getenv("UI_HOST", "0.0.0.0"))
-    parser.add_argument("--port", type=int, default=int(os.getenv("UI_PORT", "8787")))
+    parser.add_argument("--port", type=int, default=int(os.getenv("UI_PORT", "8792")))
     args = parser.parse_args(argv)
 
     _bootstrap(args)
-
     try:
         httpd = Server((args.host, args.port), Handler)
     except OSError as exc:
@@ -451,9 +437,9 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     display_host = "127.0.0.1" if args.host in {"0.0.0.0", "::"} else args.host
-    print(f"DNH team chat http://{display_host}:{args.port}", flush=True)
-    print(f"Bind {args.host}:{args.port} · transcript ghi khi có tin nhắn đầu", flush=True)
-    print(f"Session demo id (optional): {uuid.uuid4().hex[:16]}", flush=True)
+    print(f"DNH chat http://{display_host}:{args.port}", flush=True)
+    print(f"Bind {args.host}:{args.port} · transcript ghi khi có tin đầu", flush=True)
+    print(f"Session demo id: {uuid.uuid4().hex[:16]}", flush=True)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

@@ -24,25 +24,24 @@ Research agent: tìm tin theo từ khóa / theo tài khoản X, đọc URL, tổ
 ```bash
 cd starter_v0
 pip install -r requirements.txt
-# Khuyến nghị (đúng provider đề bài / có OPENROUTER_API_KEY):
-python3 -m ui --provider openrouter --version v3 --host 127.0.0.1 --port 8792
-# Fallback local:
-# python3 -m ui --provider ollama --model qwen2.5:7b --version v3 --host 127.0.0.1 --port 8792
+python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --host 127.0.0.1 --port 8792
 # mở http://127.0.0.1:8792
+# (tuỳ chọn) kiểm tra 3 kịch bản C6:
+# python3 scripts/run_c6_live.py --base http://127.0.0.1:8792
 ```
 
 **Link dùng thử (deploy):**
 
 > ```bash
 > cd starter_v0
-> python3 -m ui --provider openrouter --version v3 --host 127.0.0.1 --port 8792
+> python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --host 127.0.0.1 --port 8792
 > # terminal khác:
 > bash scripts/run_cloudflare_tunnel.sh 8792
 > ```
 >
-> URL: https://highlighted-tea-angels-relay.trycloudflare.com/
+> URL: https://referred-michel-reed-inspector.trycloudflare.com/
 >
-> _(Giữ process tunnel mở khi demo; URL trycloudflare có thể đổi mỗi lần tạo tunnel mới.)_
+> _(Giữ UI + tunnel mở khi demo; URL `trycloudflare.com` đổi mỗi lần tạo tunnel mới.)_
 
 **Evidence group eval (không cần chạy lại):** metric C5 lấy từ run **DeepSeek** đã lưu trong repo — xem mục B3.
 
@@ -143,16 +142,14 @@ Liệt kê đúng 10 case trong `starter_v0/data/eval_group.json` (5 single turn
 
 ### B4. Live Chat Evidence
 
-Cách chạy thử cho giám khảo: `--provider openrouter` (hoặc `ollama`).  
-Evidence live chat đã lưu: transcript **DeepSeek UI** + ollama/openrouter (xem file).
+UI kiểu Gemini (stdlib, `starter_v0/ui/`), provider **openrouter / openai/gpt-4o-mini**, artifact `v3+p0251ccb0a331+tc1dfecfdad0c`.  
+Live C6: chạy 3 kịch bản qua UI API (`scripts/run_c6_live.py` + session thiếu-info), transcript lưu trong `transcripts/`.
 
-| Turn / Session | User Request | Version Evidence | Outcome |
+| Scenario (C6) | User turns | Tools quan sát | Transcript |
 |---|---|---|---|
-| Research / thiếu-info / confirm (DeepSeek UI) | xem nội dung trong file | `transcripts/v3_deepseek_ui_afe23d8f4900_20261111T014320249725.transcript.json` (+ các `v3_deepseek_ui_*.transcript.json`) | Live v3 trên DeepSeek |
-| Research thường (ollama) | `Tóm tắt tin AI gần đây...` | `transcripts/v3_ollama_ui_2f0ca0676ba1_20261111T011041235207.transcript.json` | Live UI v3 |
-| Thiếu info → bổ sung (ollama) | `timeline...` rồi `Handle là sama` | `transcripts/v3_ollama_ui_e92e488dbfd7_20261111T011050060128.transcript.json` | Scenario thiếu-info |
-| Gửi/đăng (ollama) | `Đăng lên Telegram...` rồi confirm | `transcripts/v3_ollama_ui_cb268d3855c3_20261111T011103555918.transcript.json` | Confirm flow |
-| Research + send (openrouter v0) | 3 turns | `transcripts/v0_openrouter_ui_evidence3tur_20261110T190927418591.transcript.json` | Evidence UI sớm |
+| Yêu cầu thường | `Tóm tắt tin AI hôm nay bằng tiếng Việt, ngắn gọn.` | `lookup` → trả lời tóm tắt | `starter_v0/transcripts/v3_openrouter_ui_81a96500eb3d_20261111T020441803383.transcript.json` |
+| Thiếu info → bổ sung | (1) thiếu handle → (2) `The handle is sama, limit 5.` | (1) `clarify` (`waiting_for_user`) → (2) `timeline` | `starter_v0/transcripts/v3_openrouter_ui_fc7e2e73cb96_20261111T020530220627.transcript.json` |
+| Gửi/đăng → xác nhận | (1) `Đăng lên Telegram nội dung: Bản tin AI tuần này.` → (2) `Có, xác nhận gửi.` | (1) `clarify(yes_no)` → (2) `send` (thiếu `TELEGRAM_*` env → error dict, **không** gửi khi chưa confirm) | `starter_v0/transcripts/v3_openrouter_ui_36347f0e1c8a_20261111T020510520028.transcript.json` |
 
 ### B5a. Required Evidence — Tool mới, unit test, UI
 
@@ -160,10 +157,10 @@ Evidence live chat đã lưu: transcript **DeepSeek UI** + ollama/openrouter (xe
 |---|---|---|---|
 | Tool mới (`tools/datetime_window/`) | `tool.py`, `TOOL.md`; đăng ký `tools/__init__.py` + `artifacts/tools.yaml`; rule VN trong `system_prompt.md` | Parse timeframe **tiếng Việt** + EN; input xấu/`tz` lỗi → `error` dict | Không raise; trả `error` dict |
 | Unit test tool mới (≥ 3 test/tool) | `tests/test_tools_todo.py` — `datetime_window_*` (+ VN cases) | Offline, không gọi mạng | `pytest`: **0 failed** (stub tool cũ còn skip — bonus) |
-| UI (lệnh chạy + link dùng thử) | `starter_v0/ui/` + transcript B4 | Stdlib UI + tunnel | Chạy thử: `python3 -m ui --provider openrouter --version v3 --port 8792` · Public: https://highlighted-tea-angels-relay.trycloudflare.com/ |
+| UI (lệnh chạy + link dùng thử) | `starter_v0/ui/` + transcript B4 + `scripts/run_c6_live.py` | UI Gemini-like cũ + live 3 kịch bản đúng hành vi | `python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --port 8792` · Public: https://referred-michel-reed-inspector.trycloudflare.com/ |
 | Group metric (C5) | `runs/v3_B_group_deepseek_20261111T012607013544.json` | DeepSeek **1.0 / 10 case** | Evidence bằng file; không cần DeepSeek API để chấm |
 
-Tool unit tests: **3** test cho `datetime_window`. Ví dụ lỗi unit bắt được mà eval routing không bắt: `timeframe=""` hoặc `tz` không phải IANA → trả `{"error": ...}` thay vì exception (eval chỉ chấm tên tool/args, không chấm exception path).
+Tool unit tests: **≥ 3** test cho `datetime_window`. Ví dụ lỗi unit bắt được mà eval routing không bắt: `timeframe=""` hoặc `tz` không phải IANA → trả `{"error": ...}` thay vì exception (eval chỉ chấm tên tool/args, không chấm exception path).
 
 ### B5. Bonus Evidence
 
@@ -206,29 +203,31 @@ Lỗi đặc thù của model nhỏ (đếm từ run JSON):
 
 ## 5. Khó khăn và cách xử lý
 
-- **V0 boundary/send:** live transcript v0 gọi `send(confirmed=true)` ngay khi user xin gửi; thiếu `TELEGRAM_*` env → lỗi tool (transcript evidence3tur). Base eval v0→v3 đã siết clarify/`yes_no`, nhưng live evidence vẫn bản v0.
-- **Group eval chưa đo được trên máy này:** 10 case đã viết, tool đã register, nhưng DNS không resolve `openrouter.ai` → mọi attempt `provider_error` (không dùng làm bằng chứng). Cần chạy lại khi mạng OK.
-- **Transcript thiếu scenario:** chưa có lượt “thiếu info rồi bổ sung” trên artifact **v3**.
-- **Public demo:** https://highlighted-tea-angels-relay.trycloudflare.com/ (cần giữ process tunnel chạy).
+- **UI + live C6:** giữ UI Gemini-like cũ (`ui/static` + model picker); bổ sung `scripts/run_c6_live.py` và 3 transcript openrouter đúng hành vi (research / thiếu-info / confirm-send).
+- **Live thiếu-handle đôi khi hỏi bằng text** thay vì gọi `clarify` (tuỳ wording). Đã chọn transcript có `clarify` → `timeline` làm evidence B4.
+- **`send` sau confirm:** đúng boundary (`clarify` trước, `send` sau); trên máy demo thiếu `TELEGRAM_*` → tool trả error dict (an toàn), chưa bonus “gửi thật”.
+- **Tunnel `trycloudflare.com`:** URL tạm, cần giữ process mở; agent Cursor dễ dính `ALL_PROXY` → chạy UI/tunnel từ Terminal.app, `unset` proxy trong script.
+- **C5 evidence:** group metric lấy từ DeepSeek run JSON đã lưu (1.0); giám khảo không bắt buộc có DeepSeek key.
 
 ## 6. Tổng hợp đóng góp
 
 Chi tiết đóng góp của từng thành viên nằm trong [TEAM.md](../../TEAM.md) và các báo cáo cá nhân:
 
 - Nghị: [report/team/2A202603947_LaQuocNghi.md](2A202603947_LaQuocNghi.md) — prompt/tools.yaml, v0–v3 base eval, B1/B2
-- Hà: [report/team/2A202603901_LeThanhHa.md](2A202603901_LeThanhHa.md) — eval group 10 case + DeepSeek 1.0; đăng ký/`datetime_window` + unit test + Việt hoá prompt/tools cho group; UI/tunnel/transcript; lắp Phần A / B3–B5a / reflection
-- Đạt: tool `datetime_window` (code ban đầu) — báo cáo cá nhân Đạt **chưa** tạo (theo yêu cầu bỏ qua bước này)
+- Hà: [report/team/2A202603901_LeThanhHa.md](2A202603901_LeThanhHa.md) — eval group 10 case + DeepSeek 1.0; đăng ký/`datetime_window` + unit test + Việt hoá; **UI cũ + live C6 + tunnel + C7**
+- Đạt: tool `datetime_window` (code ban đầu) — báo cáo cá nhân Đạt **chưa** có file `MSSV_HoTen.md` (rủi ro C8)
 
 ## 7. Hạn chế và hướng cải thiện — B6. Reflection
 
-- **Fix thuộc `system_prompt.md`:** v1 bỏ đoán/gửi luôn + scope; v3 ép turn đầu send/đăng dùng `clarify(yes_no)` → R12 PASS, base 1.0; thêm rule gọi `datetime_window` trước lookup/timeline khi timeframe mơ hồ.
+- **Fix thuộc `system_prompt.md`:** v1 bỏ đoán/gửi luôn + scope; v3 ép turn đầu send/đăng dùng `clarify(yes_no)` → R12 PASS, base 1.0; rule `datetime_window` cho timeframe mơ hồ (không map thẳng enum).
 - **Fix thuộc `tools.yaml`:** v2 siết description/`response_type`/send boundary/args; sau đó khai báo `datetime_window`.
-- **Cần review thủ công / evidence live:** (1) transcript v0 thiếu “thiếu info rồi bổ sung”; (2) Telegram thật phụ thuộc env; (3) group suite có case nhưng chưa có run hợp lệ vì DNS.
-- **Vòng tiếp theo:** khi mạng OK → chạy `--suite group` cập nhật B3 Result; live chat **v3** (clarify-then-fill + confirm-before-send); tunnel URL cho A1; Đạt bổ sung báo cáo cá nhân.
+- **Evidence live C6 (đã có):** research `lookup`; thiếu handle `clarify`→`timeline`; đăng Telegram `clarify`→`send` — xem B4.
+- **Còn hạn chế:** Telegram thật cần env; UI public phụ thuộc tunnel; C8 thiếu báo cáo Đạt; stub test tool starter vẫn skip (không ảnh hưởng 0 failed).
+- **Vòng tiếp theo:** bổ sung báo cáo Đạt; (tuỳ chọn) set `TELEGRAM_*` để bonus gửi thật; siết thêm prompt nếu muốn mọi wording thiếu-handle đều gọi `clarify`.
 
 ## 8. Tài liệu tham khảo
 
 - [RUBRIC.md](../../RUBRIC.md), [SUBMISSION.md](../../SUBMISSION.md), [PHAN_CONG.md](../../PHAN_CONG.md)
-- `starter_v0/artifacts/version_log.csv`, runs v0–v3 base (B1)
-- Transcript UI: `starter_v0/transcripts/v0_openrouter_ui_evidence3tur_20261110T190927418591.transcript.json`
-- Commit UI: `4adf5a5`
+- `starter_v0/artifacts/version_log.csv`, runs v0–v3 base (B1), group DeepSeek 1.0 (B3)
+- Transcript C6: ba file trong bảng B4
+- UI: `starter_v0/ui/`, tunnel script `starter_v0/scripts/run_cloudflare_tunnel.sh`
