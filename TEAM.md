@@ -7,8 +7,8 @@
 - Repo nhóm: `K5-L3B-DAY03-NhomDNH-ResearchAgentToolEval`
 - URL repo, nhánh nộp, commit chốt:
   - URL: https://github.com/quocnghidev/K5-L3B-DAY03-NhomDNH-ResearchAgentToolEval
-  - Nhánh nộp: `main`
-  - Commit chốt: _(điền SHA khi nộp)_
+  - Nhánh nộp: `nearly-final` (merge vào `main` khi Đạt xong phần còn lại)
+  - Commit chốt hiện tại: `de1fbbc63471e64fe6addd8878018a56cb518f45`
 - Chi tiết phân công theo timeline: xem [PHAN_CONG.md](PHAN_CONG.md)
 
 ## Thành viên
