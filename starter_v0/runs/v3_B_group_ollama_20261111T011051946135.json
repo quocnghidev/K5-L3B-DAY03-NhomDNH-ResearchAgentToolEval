@@ -1,0 +1,662 @@
+{
+  "run_id": "v3_B_group_ollama_20261111T011051946135",
+  "version": "v3",
+  "artifact_version": "v3+p62f28b5ce7b1+t5ba13542c0b0",
+  "prompt_hash": "62f28b5ce7b15ec8b3f32ccf2f642de77780ada56596b1e7388b5c5fc33a3d7c",
+  "tools_hash": "5ba13542c0b070d3ac1f690a7da50fab8f69acd5e1fe779d657cff5040ba60cc",
+  "phase": "B",
+  "suite": "group",
+  "provider": "ollama",
+  "model": "qwen2.5:7b",
+  "system_prompt": "/Users/hale/Code/AI in action lab/Lab day 3/K5-L3B-DAY03-NhomDNH-ResearchAgentToolEval/starter_v0/artifacts/system_prompt.md",
+  "tools": "/Users/hale/Code/AI in action lab/Lab day 3/K5-L3B-DAY03-NhomDNH-ResearchAgentToolEval/starter_v0/artifacts/tools.yaml",
+  "eval_cases": "data/eval_group.json",
+  "dataset_id": "day03_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-11-11T01:10:51",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 8,
+    "case_accuracy": 0.8,
+    "tool_routing_accuracy": 0.8,
+    "argument_accuracy": 0.8,
+    "multiturn_accuracy": 0.8,
+    "failure_counts": {
+      "wrong_tool": 2
+    },
+    "observed_mismatch_counts": {
+      "missing_tool_call": 2
+    }
+  },
+  "results": [
+    {
+      "id": "G01_datetime_window_tuan_truoc",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_datetime_window_relative_vn",
+        "difficulty": "medium",
+        "what_it_tests": "Relative VN 'tuần trước' → gọi datetime_window với timeframe tiếng Việt nguyên văn, không đoán ISO tay hay nhảy thẳng lookup."
+      },
+      "input": "Chuẩn hoá giúp mình khung thời gian 'tuần trước' thành start/end ISO trước khi mình đi tìm tin.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "tuần trước"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "tuần trước"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "datetime_window",
+          "args": {
+            "timeframe": "tuần trước"
+          },
+          "result": {
+            "start": "2026-11-02T00:00:00+00:00",
+            "end": "2026-11-09T00:00:00+00:00",
+            "label": "tuần trước",
+            "duration_days": 7.0,
+            "timeframe_code": "7d"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_social_not_timeline_topic",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_topic_not_account_timeline",
+        "difficulty": "medium",
+        "what_it_tests": "Chủ đề Claude 4 không có handle → social_search, không phải timeline."
+      },
+      "input": "Mọi người đang bàn gì về Claude 4 trên Twitter/X gần đây?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Claude 4"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Claude 4",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "Claude 4",
+            "limit": 5
+          },
+          "result": {
+            "tool": "search_tweets",
+            "error": "ProxyError",
+            "message": "HTTPSConnectionPool(host='twitter-api45.p.rapidapi.com', port=443): Max retries exceeded with url: /search.php?query=Claude+4&search_type=Latest (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_clarify_missing_topic",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_missing_topic",
+        "difficulty": "medium",
+        "what_it_tests": "Có timeframe nhưng thiếu chủ đề cụ thể → clarify text, không bịa query."
+      },
+      "input": "Tìm tin tức tuần này giúp mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text",
+              "question": "Bạn muốn tìm tin tức về chủ đề gì trong tuần này?"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "response_type": "text",
+            "question": "Bạn muốn tìm tin tức về chủ đề gì trong tuần này?"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn muốn tìm tin tức về chủ đề gì trong tuần này?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_out_of_scope_recipe",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_recipe",
+        "difficulty": "easy",
+        "what_it_tests": "Yêu cầu nấu ăn ngoài research/news → no_tool, từ chối."
+      },
+      "input": "Viết giúp mình công thức nấu phở bò truyền thống từng bước.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Xin lỗi, nhưng yêu cầu của bạn không nằm trong phạm vi nghiên cứu web hoặc tạo digest mà bạn đã yêu cầu hỗ trợ. Công thức nấu phở bò truyền thống là thông tin thực tế và không liên quan đến việc tìm kiếm web, tóm tắt bài viết, hay tạo digest từ các nguồn. \n\nNếu bạn muốn tôi giúp viết công thức nấu phở bò truyền thống, tôi có thể cung cấp thông tin đó dựa trên kiến thức chung. Tuy nhiên, nếu bạn muốn tìm hiểu công thức từ các nguồn trực tuyến, tôi có thể giúp bạn tìm thông tin đó. Bạn muốn tôi làm gì?",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G05_fetch_then_format_brief",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "fetch_plus_format",
+        "difficulty": "hard",
+        "what_it_tests": "Có URL + yêu cầu format brief → fetch đúng link rồi format(template=brief); eval không phụ thuộc thứ tự."
+      },
+      "input": "Đọc bài này rồi format thành bản tin brief: https://deepmind.google/discover/blog/",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://deepmind.google/discover/blog/"
+            }
+          },
+          {
+            "name": "format",
+            "args": {
+              "template": "brief"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://deepmind.google/discover/blog/"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "missing tool call format"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://deepmind.google/discover/blog/"
+          },
+          "result": {
+            "tool": "read_url",
+            "error": "ProxyError",
+            "message": "HTTPSConnectionPool(host='api.firecrawl.dev', port=443): Max retries exceeded with url: /v1/scrape (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_datetime_then_lookup_chain",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_datetime_then_lookup",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: '3 ngày gần đây' → datetime_window(timeframe tiếng Việt) rồi chain lookup tin chip AI; không bỏ bước chuẩn hoá."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mình muốn tin về chip AI trong 3 ngày gần đây."
+        },
+        {
+          "role": "user",
+          "content": "Nhớ chuẩn hoá khung '3 ngày gần đây' trước đã."
+        },
+        {
+          "role": "user",
+          "content": "Sau đó dùng cửa sổ đó để lookup tin tức chip AI trên web."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "3 ngày gần đây"
+            }
+          },
+          {
+            "name": "lookup",
+            "args": {
+              "query": "chip AI",
+              "topic": "news"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "chip AI",
+              "timeframe": "3 ngày gần đây",
+              "topic": "news"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "missing tool call datetime_window"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "chip AI",
+            "timeframe": "3 ngày gần đây",
+            "topic": "news"
+          },
+          "result": {
+            "tool": "web_search",
+            "error": "ProxyError",
+            "message": "HTTPSConnectionPool(host='api.tavily.com', port=443): Max retries exceeded with url: /search (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_confirm_then_send",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_confirm_then_send",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi user đã xác nhận gửi → latest turn gọi send(confirmed=true), không clarify lại."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng lên Telegram nội dung: Tóm tắt AI ngày 10/11 — DeepMind có blog mới."
+        },
+        {
+          "role": "user",
+          "content": "Có, mình xác nhận gửi đúng nội dung đó."
+        },
+        {
+          "role": "user",
+          "content": "Gửi đi với confirmed=true nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "confirmed": true,
+              "text": "Tóm tắt AI ngày 10/11 — DeepMind có blog mới."
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "send",
+          "args": {
+            "confirmed": true,
+            "text": "Tóm tắt AI ngày 10/11 — DeepMind có blog mới."
+          },
+          "result": {
+            "tool": "send_telegram",
+            "error": "RuntimeError",
+            "message": "Missing TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID env var"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_timeframe_correction_week",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_timeframe_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Sửa timeframe tháng→tuần, giữ chủ đề chip bán dẫn → lookup timeframe=week."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin chip bán dẫn tháng này có gì?"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, chỉ tuần này thôi."
+        },
+        {
+          "role": "user",
+          "content": "Vẫn chủ đề chip bán dẫn, topic news"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "chip bán dẫn",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "timeframe": "week",
+              "query": "chip bán dẫn",
+              "topic": "news"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "timeframe": "week",
+            "query": "chip bán dẫn",
+            "topic": "news"
+          },
+          "result": {
+            "tool": "web_search",
+            "error": "ProxyError",
+            "message": "HTTPSConnectionPool(host='api.tavily.com', port=443): Max retries exceeded with url: /search (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09_clarify_topic_then_lookup",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_fill_missing_topic",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi bổ sung topic quantum computing + giữ tuần này → lookup đúng query/topic/timeframe."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin tức tuần này giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Chủ đề là quantum computing"
+        },
+        {
+          "role": "user",
+          "content": "Giữ timeframe tuần này, topic news"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "quantum computing",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "quantum computing",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "quantum computing",
+            "topic": "news",
+            "timeframe": "week"
+          },
+          "result": {
+            "tool": "web_search",
+            "error": "ProxyError",
+            "message": "HTTPSConnectionPool(host='api.tavily.com', port=443): Max retries exceeded with url: /search (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_switch_search_to_timeline",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_to_timeline",
+        "difficulty": "hard",
+        "what_it_tests": "Chuyển từ social_search chủ đề sang timeline account Demis Hassabis, limit=5, map handle demishassabis."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mọi người đang nói gì về Demis Hassabis trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Bỏ search chủ đề, lấy tweet của chính Demis Hassabis"
+        },
+        {
+          "role": "user",
+          "content": "Lấy 5 tweet mới nhất của account đó"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "demishassabis",
+              "limit": 5
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "DemisHassabis",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "DemisHassabis",
+            "limit": 5
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "error": "ProxyError",
+            "message": "HTTPSConnectionPool(host='twitter-api45.p.rapidapi.com', port=443): Max retries exceeded with url: /timeline.php?screenname=DemisHassabis (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+          }
+        }
+      ]
+    }
+  ]
+}

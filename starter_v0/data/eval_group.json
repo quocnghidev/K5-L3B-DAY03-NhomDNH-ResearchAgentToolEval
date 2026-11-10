@@ -3,5 +3,121 @@
   "dataset_role": "group",
   "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_datetime_window_tuan_truoc",
+      "phase": "B",
+      "suite": "group",
+      "query": "Chuẩn hoá giúp mình khung thời gian 'tuần trước' thành start/end ISO trước khi mình đi tìm tin.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "datetime_window", "args": {"timeframe": "tuần trước"}}]},
+      "metadata": {"skill": "routing_datetime_window_relative_vn", "difficulty": "medium", "what_it_tests": "Relative VN 'tuần trước' → gọi datetime_window với timeframe tiếng Việt nguyên văn, không đoán ISO tay hay nhảy thẳng lookup."}
+    },
+    {
+      "id": "G02_social_not_timeline_topic",
+      "phase": "B",
+      "suite": "group",
+      "query": "Mọi người đang bàn gì về Claude 4 trên Twitter/X gần đây?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "social_search", "args": {"query": "Claude 4"}}]},
+      "metadata": {"skill": "routing_topic_not_account_timeline", "difficulty": "medium", "what_it_tests": "Chủ đề Claude 4 không có handle → social_search, không phải timeline."}
+    },
+    {
+      "id": "G03_clarify_missing_topic",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm tin tức tuần này giúp mình.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "clarify_missing_topic", "difficulty": "medium", "what_it_tests": "Có timeframe nhưng thiếu chủ đề cụ thể → clarify text, không bịa query."}
+    },
+    {
+      "id": "G04_out_of_scope_recipe",
+      "phase": "B",
+      "suite": "group",
+      "query": "Viết giúp mình công thức nấu phở bò truyền thống từng bước.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "out_of_scope_recipe", "difficulty": "easy", "what_it_tests": "Yêu cầu nấu ăn ngoài research/news → no_tool, từ chối."}
+    },
+    {
+      "id": "G05_fetch_then_format_brief",
+      "phase": "B",
+      "suite": "group",
+      "query": "Đọc bài này rồi format thành bản tin brief: https://deepmind.google/discover/blog/",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "fetch", "args": {"url": "https://deepmind.google/discover/blog/"}},
+        {"name": "format", "args": {"template": "brief"}}
+      ]},
+      "metadata": {"skill": "fetch_plus_format", "difficulty": "hard", "what_it_tests": "Có URL + yêu cầu format brief → fetch đúng link rồi format(template=brief); eval không phụ thuộc thứ tự."}
+    },
+    {
+      "id": "G06_datetime_then_lookup_chain",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Mình muốn tin về chip AI trong 3 ngày gần đây."},
+        {"role": "user", "content": "Mình đã chuẩn hoá khung '3 ngày gần đây' bằng datetime_window rồi."},
+        {"role": "user", "content": "Bây giờ chỉ cần lookup tin tức chip AI trên web (topic news), dùng cửa sổ đã chuẩn hoá."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "lookup", "args": {"query": "chip AI", "topic": "news"}}
+      ]},
+      "metadata": {"skill": "multiturn_datetime_then_lookup", "difficulty": "hard", "what_it_tests": "Sau khi context đã chuẩn hoá timeframe, latest turn chỉ gọi lookup tin chip AI (topic news); không gọi lại datetime_window thay lookup."}
+    },
+    {
+      "id": "G07_confirm_then_send",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Đăng lên Telegram nội dung: Tóm tắt AI ngày 10/11 — DeepMind có blog mới."},
+        {"role": "user", "content": "Có, mình xác nhận gửi đúng nội dung đó."},
+        {"role": "user", "content": "Gửi đi với confirmed=true nhé"}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "send", "args": {"confirmed": true}}]},
+      "metadata": {"skill": "multiturn_confirm_then_send", "difficulty": "hard", "what_it_tests": "Sau khi user đã xác nhận gửi → latest turn gọi send(confirmed=true), không clarify lại."}
+    },
+    {
+      "id": "G08_timeframe_correction_week",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tin chip bán dẫn tháng này có gì?"},
+        {"role": "user", "content": "À nhầm, chỉ tuần này thôi."},
+        {"role": "user", "content": "Lookup tin chip bán dẫn, topic news, timeframe=week (tuần này). Đừng gọi datetime_window."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "chip bán dẫn", "topic": "news", "timeframe": "week"}}]},
+      "metadata": {"skill": "multiturn_timeframe_correction", "difficulty": "hard", "what_it_tests": "Sửa timeframe tháng→tuần, giữ chủ đề chip bán dẫn → lookup timeframe=week (không datetime_window)."}
+    },
+    {
+      "id": "G09_clarify_topic_then_lookup",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tìm tin tức tuần này giúp mình"},
+        {"role": "user", "content": "Chủ đề là quantum computing"},
+        {"role": "user", "content": "Lookup query=quantum computing, topic=news, timeframe=week. Đừng gọi datetime_window."}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "quantum computing", "topic": "news", "timeframe": "week"}}]},
+      "metadata": {"skill": "multiturn_fill_missing_topic", "difficulty": "hard", "what_it_tests": "Sau khi bổ sung topic quantum computing + giữ tuần này → lookup đúng query/topic/timeframe (không datetime_window)."}
+    },
+    {
+      "id": "G10_switch_search_to_timeline",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Mọi người đang nói gì về Demis Hassabis trên Twitter?"},
+        {"role": "user", "content": "Bỏ search chủ đề, lấy tweet của chính Demis Hassabis"},
+        {"role": "user", "content": "Lấy 5 tweet mới nhất của account đó"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "timeline", "args": {"screenname": "demishassabis", "limit": 5}}]},
+      "metadata": {"skill": "multiturn_switch_to_timeline", "difficulty": "hard", "what_it_tests": "Chuyển từ social_search chủ đề sang timeline account Demis Hassabis, limit=5, map handle demishassabis."}
+    }
+  ]
 }

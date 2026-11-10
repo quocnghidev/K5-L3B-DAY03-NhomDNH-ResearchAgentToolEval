@@ -20,20 +20,49 @@ _UNIT_SECONDS: dict[str, int] = {
     "weeks": 604800,
     "month": 2592000,
     "months": 2592000,
+    # Vietnamese units
+    "phút": 60,
+    "gio": 3600,
+    "giờ": 3600,
+    "ngay": 86400,
+    "ngày": 86400,
+    "tuan": 604800,
+    "tuần": 604800,
+    "thang": 2592000,
+    "tháng": 2592000,
+}
+
+_VN_ALIASES: dict[str, str] = {
+    "hôm nay": "today",
+    "hom nay": "today",
+    "hôm qua": "yesterday",
+    "hom qua": "yesterday",
+    "tuần này": "this week",
+    "tuan nay": "this week",
+    "tuần trước": "last week",
+    "tuan truoc": "last week",
+    "tháng này": "this month",
+    "thang nay": "this month",
+    "tháng trước": "last month",
+    "thang truoc": "last month",
 }
 
 
 def _unit_to_code(value: int, unit: str) -> str:
     unit = unit.lower().rstrip("s")
-    if unit in {"hour", "hr"}:
+    if unit in {"hour", "hr", "gio", "giờ"}:
         return f"{value}h"
-    if unit in {"day", "week", "month"}:
-        if unit == "week":
-            return f"{value * 7}d"
-        if unit == "month":
-            return f"{value * 30}d"
+    if unit in {"day", "ngay", "ngày"}:
         return f"{value}d"
+    if unit in {"week", "tuan", "tuần"}:
+        return f"{value * 7}d"
+    if unit in {"month", "thang", "tháng"}:
+        return f"{value * 30}d"
     return f"{value}d"
+
+
+def _normalize_timeframe(timeframe_lc: str) -> str:
+    return _VN_ALIASES.get(timeframe_lc, timeframe_lc)
 
 
 def datetime_window(
@@ -41,12 +70,12 @@ def datetime_window(
     reference_date: str | None = None,
     tz: str = "UTC",
 ) -> dict[str, Any]:
-    """Normalize a natural-language timeframe to structured start/end datetimes."""
+    """Chuẩn hoá timeframe ngôn ngữ tự nhiên (VI/EN) thành start/end ISO."""
     if not timeframe or not isinstance(timeframe, str):
         return {"error": "timeframe phải là chuỗi không rỗng."}
 
     timeframe_raw = timeframe.strip()
-    timeframe_lc = timeframe_raw.lower()
+    timeframe_lc = _normalize_timeframe(timeframe_raw.lower())
 
     try:
         tzinfo: timezone | ZoneInfo = ZoneInfo(tz) if tz and tz != "UTC" else timezone.utc
@@ -78,7 +107,18 @@ def datetime_window(
     label = timeframe_raw
     timeframe_code: str | None = None
 
-    match = re.fullmatch(r"(?:last|past)\s+(\d+)\s+([a-zA-Z]+)|((\d+)\s+([a-zA-Z]+)\s+ago)", timeframe_lc)
+    # EN: last/past N units | N units ago
+    match = re.fullmatch(
+        r"(?:last|past)\s+(\d+)\s+([a-zA-Z]+)|((\d+)\s+([a-zA-Z]+)\s+ago)",
+        timeframe_lc,
+    )
+    # VI: N ngày/tuần/tháng gần đây | N ngày/tuần/tháng trước | trong N ngày
+    vn_match = re.fullmatch(
+        r"(?:trong\s+)?(\d+)\s+(phút|gio|giờ|ngay|ngày|tuan|tuần|thang|tháng)"
+        r"(?:\s+(?:gần đây|gan day|trước|truoc))?",
+        timeframe_lc,
+    )
+
     if match:
         if match.group(1):
             value = int(match.group(1))
@@ -88,7 +128,13 @@ def datetime_window(
             unit = match.group(5)
         unit = unit.lower().rstrip("s")
         if unit not in _UNIT_SECONDS:
-            return {"error": f"Đơn vị thời gian không nhận ra: {unit!r}. Hỗ trợ: minutes, hours, days, weeks, months."}
+            return {"error": f"Đơn vị thời gian không nhận ra: {unit!r}."}
+        start = now - timedelta(seconds=_UNIT_SECONDS[unit] * value)
+        timeframe_code = _unit_to_code(value, unit)
+
+    elif vn_match:
+        value = int(vn_match.group(1))
+        unit = vn_match.group(2)
         start = now - timedelta(seconds=_UNIT_SECONDS[unit] * value)
         timeframe_code = _unit_to_code(value, unit)
 
@@ -129,8 +175,8 @@ def datetime_window(
         return {
             "error": (
                 f"Không thể parse timeframe: {timeframe_raw!r}. "
-                "Thử dùng: 'last 7 days', 'past 3 hours', 'yesterday', 'this week', "
-                "'last month', 'N days ago'."
+                "Thử dùng: 'tuần trước', '3 ngày gần đây', 'hôm qua', 'tháng này', "
+                "'last 7 days', 'yesterday', 'this week'."
             )
         }
 

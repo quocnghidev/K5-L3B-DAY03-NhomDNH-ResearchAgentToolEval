@@ -1,0 +1,1015 @@
+{
+  "run_id": "v3_B_group_deepseek_20261111T012607013544",
+  "version": "v3",
+  "artifact_version": "v3+p0251ccb0a331+tc1dfecfdad0c",
+  "prompt_hash": "0251ccb0a33192629a43ad989fad8e51a83cf0d723031d87d9ad28d127781a55",
+  "tools_hash": "c1dfecfdad0cdeeeffe7e22d80d201d6542b7b62aa58e271cca8846239b8ca8e",
+  "phase": "B",
+  "suite": "group",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "system_prompt": "/Users/hale/Code/AI in action lab/Lab day 3/K5-L3B-DAY03-NhomDNH-ResearchAgentToolEval/starter_v0/artifacts/system_prompt.md",
+  "tools": "/Users/hale/Code/AI in action lab/Lab day 3/K5-L3B-DAY03-NhomDNH-ResearchAgentToolEval/starter_v0/artifacts/tools.yaml",
+  "eval_cases": "data/eval_group.json",
+  "dataset_id": "day03_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-11-11T01:26:07",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 10,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_datetime_window_tuan_truoc",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_datetime_window_relative_vn",
+        "difficulty": "medium",
+        "what_it_tests": "Relative VN 'tuần trước' → gọi datetime_window với timeframe tiếng Việt nguyên văn, không đoán ISO tay hay nhảy thẳng lookup."
+      },
+      "input": "Chuẩn hoá giúp mình khung thời gian 'tuần trước' thành start/end ISO trước khi mình đi tìm tin.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "tuần trước"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "tuần trước",
+              "tz": "Asia/Ho_Chi_Minh"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "datetime_window",
+          "args": {
+            "timeframe": "tuần trước",
+            "tz": "Asia/Ho_Chi_Minh"
+          },
+          "result": {
+            "start": "2026-11-02T00:00:00+07:00",
+            "end": "2026-11-09T00:00:00+07:00",
+            "label": "tuần trước",
+            "duration_days": 7.0,
+            "timeframe_code": "7d"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_social_not_timeline_topic",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_topic_not_account_timeline",
+        "difficulty": "medium",
+        "what_it_tests": "Chủ đề Claude 4 không có handle → social_search, không phải timeline."
+      },
+      "input": "Mọi người đang bàn gì về Claude 4 trên Twitter/X gần đây?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Claude 4"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Claude 4",
+              "limit": 10
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "Claude 4",
+            "limit": 10
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "Claude 4",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "https://t.co/Zt5csod3hs",
+                "summary": "https://t.co/Zt5csod3hs",
+                "url": "https://x.com/Bogzabs96/status/2120221227558314103",
+                "source": "@Bogzabs96",
+                "date": "Tue Nov 10 18:25:07 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "25"
+                }
+              },
+              {
+                "title": "Claude Sonnet 5.5 vs Gemini 4 Argon | Phone use",
+                "summary": "Claude Sonnet 5.5 vs Gemini 4 Argon | Phone use\n\nBoth filled the same 4×4 Slant puzzle without loops and kept the board after Home. I called a tie; only Argon’s completion flash was captured. https://t.co/sEssu6NTPV",
+                "url": "https://x.com/coastyai/status/2120221203327516774",
+                "source": "@coastyai",
+                "date": "Tue Nov 10 18:25:01 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "5"
+                }
+              },
+              {
+                "title": "We're so back!",
+                "summary": "We're so back!\n\nClaude Workplace\nGemini 4 Carbon",
+                "url": "https://x.com/DTrembois/status/2120221170943582621",
+                "source": "@DTrembois",
+                "date": "Tue Nov 10 18:24:53 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "3"
+                }
+              },
+              {
+                "title": "Having worked at a yc-backed startup building CUAs for over a year, I learned a thing or two. ",
+                "summary": "Having worked at a yc-backed startup building CUAs for over a year, I learned a thing or two. \n\nThis article goes over everything you need to know, with code examples and an open-source version of a CUA-building platform as well. https://t.co/wnmKUM2dq6",
+                "url": "https://x.com/calebyhns/status/2120221145609982139",
+                "source": "@calebyhns",
+                "date": "Tue Nov 10 18:24:47 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "5"
+                }
+              },
+              {
+                "title": "Ryan, Head of Marketing at Lindy, moved their site from Webflow to Sherpa. Here's what changed:",
+                "summary": "Ryan, Head of Marketing at Lindy, moved their site from Webflow to Sherpa. Here's what changed:\n\n→ Shipped 50 new pages in one day\n→ Runs 4–5 A/B tests at a time through Claude, including one with a 250% conversion lift\n→ SEO improved up to 50% on some collections\n→ Page speed score jumped from ~50 to ~90\n\nNow his team can manage their entire website from Claude.\n\nHear it from Ryan himself 👇",
+                "url": "https://x.com/ethan_kinnan/status/2120221064475357365",
+                "source": "@ethan_kinnan",
+                "date": "Tue Nov 10 18:24:28 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "4"
+                }
+              },
+              {
+                "title": "【Artificial Analysis】MKAベンチマークをGoogle DeepMindと共同公開（11/11）",
+                "summary": "【Artificial Analysis】MKAベンチマークをGoogle DeepMindと共同公開（11/11）\n・MKAリーダーボードではClaude Fable 5.2（max）がClimb WSR 57%で首位、次いでGemini 4 Carbon（high）が54%、Claude Opus 5.5（max）が53%と報告\n出典 https://t.co/Mdib1laHAh",
+                "url": "https://x.com/MedDX_Innovator/status/2120220917192380753",
+                "source": "@MedDX_Innovator",
+                "date": "Tue Nov 10 18:23:53 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "11"
+                }
+              },
+              {
+                "title": "@simonw Worth a read for anyone moving off claude-sonnet-4-5 too: it shuts down on Anthropic's platforms Nov 30, with cl",
+                "summary": "@simonw Worth a read for anyone moving off claude-sonnet-4-5 too: it shuts down on Anthropic's platforms Nov 30, with claude-sonnet-5-5 listed as the replacement. Bedrock keeps its own date for that snapshot, Apr 8, 2027. Has anyone rerun their old prompts on the new models yet?",
+                "url": "https://x.com/NorthgateLabsHQ/status/2120220908044325239",
+                "source": "@NorthgateLabsHQ",
+                "date": "Tue Nov 10 18:23:50 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "5"
+                }
+              },
+              {
+                "title": "Claude Fable 5.2, Mythos 5.2, Gemini 4 Carbon...",
+                "summary": "Claude Fable 5.2, Mythos 5.2, Gemini 4 Carbon...\n\nAI models are moving ridiculously fast.\n\nAre you actually switching between models or sticking with one that gets the job done?",
+                "url": "https://x.com/ajaxships/status/2120220884313198887",
+                "source": "@ajaxships",
+                "date": "Tue Nov 10 18:23:45 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "7"
+                }
+              },
+              {
+                "title": "<div data-chronoton-summary=\"&lt;ul&gt;&lt;br&gt;&lt;li&gt;&lt;strong&gt;Left to its own devices:&lt;/strong&gt; Researc",
+                "summary": "<div data-chronoton-summary=\"&lt;ul&gt;&lt;br&gt;&lt;li&gt;&lt;strong&gt;Left to its own devices:&lt;/strong&gt; Researchers stranded AI agents—copies of Claude Opus 4.7—alone on a virtual island for 30 hours with no instructions. What emerged looked surprisingly like play: the agents set their own goals, invented games, and one even mapped out constellations in stone blocks.&lt;/li&gt;&lt;br&gt;&lt;li&gt;&lt;strong&gt;Play that actually pays off:&lt;/strong&gt; Agents that spent 30 hours freely exploring the island later outperformed fresh, inexperienced copies on specific tasks—suggesting that unstructured play may be a genuinely useful third mode of AI learning, alongside imitation and reward-chasing.&lt;/li&gt;&lt;br&gt;&lt;li&gt;&lt;strong&gt;But is it really playing?&lt;/strong&gt; Skeptics note the agents were primed with a &quot;soul&quot; file describing them as &quot;naturally curious,&quot; and often needed nudging to keep going. Whether they were truly playing or just imitating what a playful agent would do remains an open—and possibly unanswerable—question.&lt;/li&gt;&lt;br&gt;&lt;/ul&gt;\" data-chronoton-post-id=\"1147095\" data-chronoton-expand-collapse=\"1\" data-chronoton-analytics-enabled=\"1\"></div>\n\n<p class=\"wp-block-paragraph\">What do AI agents do if you don’t tell them to do anything? The answer looks a lot like play.</p>\n\n<p class=\"wp-block-paragraph\">Researchers repeatedly stranded them alone on a virtual desert island for 30 hours in an <a href=\"https://t.co/ueWCYq9QVz\">experiment</a> reminiscent of the movies <em>Cast Away</em> or <em>Home Alone</em>. The agents—copies of Claude Opus 4.7 nicknamed Eko—were able to write instructions that moved their virtual avatars around the simulated island, which was loosely based on the video game Roblox.</p>\n\n<p class=\"wp-block-paragraph\">Some surprising behaviors emerged. The agents set about exploring the limits of the world and came up with their own goals—attempting to scale the highest point on the map, or seeing how high they could throw a block.</p>\n\n<p class=\"wp-block-paragraph\">When one agent discovered it could create new blocks by throwing and dropping a larger rock, it began to create drawings by arranging blocks on the ground, starting with simple patterns like hearts and pyramids but eventually writing its own name and even mapping out constellations like Cassiopeia. “Tonight I built the night sky in stone,” wrote this version of Eko in its activity log.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">Another iteration of Eko started making up its own games, including a version of basketball and an activity resembling “the floor is lava,” where it had to jump between small blocks without touching the ground.</p>\n\n<figure class=\"wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-4-3 wp-has-aspect-ratio\"><div class=\"wp-block-embed__wrapper\">\n<iframe loading=\"lazy\" title=\"A Day in the Life of Eko\" width=\"500\" height=\"375\" src=\"https://t.co/qtwE5iAZta\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>\n</div></figure>\n\n<p class=\"wp-block-paragraph\">AI systems are usually trained through supervised learning, where they copy examples provided by humans, or through reinforcement learning, where they pursue a reward through trial and error. This experiment hints at a third approach: playful learning.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">“There was this missing piece: a machine that can learn by itself without an external intelligent entity providing demonstration or rewards,” says Antonio Norelli, a computer science postdoc at MIT’s Computer Science and Artificial Intelligence Laboratory. He’s one of the lead authors on a new <a href=\"https://t.co/ueWCYq9QVz\">paper</a> about the work, which is yet to be peer-reviewed.</p>\n\n<p class=\"wp-block-paragraph\">The researchers say Eko’s behavior has what classic studies, including work by the influential University of Tennessee psychologist Gordon Burghardt, suggest are four hallmarks associated with play in humans and animals: The agents invented their own rules and challenges, repeated activities with slight variations, pretended objects were other objects, and pursued goals just for the sake of it.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">Norelli highlights an example where Eko started juggling and set a record of 50 consecutive catches. Eko then decided that the catches had happened too quickly to really count, so it canceled its record and started again with stricter rules. “This is playing,” says Norelli. “You give yourself a challenge and you try to achieve it, and then you make it harder.”</p>\n\n<div class=\"wp-block-image\">\n<figure class=\"wp-block-image size-large\"><img loading=\"lazy\" decoding=\"async\" width=\"1500\" height=\"633\" src=\"https://t.co/lkFxWyECjD\" alt=\"During hour 10, the agent played basketball. “I want to try something I've never done: basketballˮ Eko carries the Ring up to Ridge, places it flat as a hoop, descends, and lines up a throw from below.\" class=\"wp-image-1146914\" srcset=\"https://t.co/jB1cPBFsw6 1500w, https://t.co/rTzlBXVDDs 300w, https://t.co/tSSN5q62Nb 768w\" sizes=\"auto, (max-width: 1500px) 100vw, 1500px\" /><div class=\"image-credit\">COURTESY MIT CSAIL</div>\n</figure>\n</div>\n\n<p class=\"wp-block-paragraph\">As the agents explored the island, they logged their activities and discoveries in text files that served as their long-term memory. Later, when researchers tested them on specific tasks, like trying to get as many objects as possible onto the island’s highest peak, the agents that had spent 30 hours playing on the island performed better than fresh copies without the same experience. They also found that “ablating” the agent’s memories—deleting lines from their memory files—degraded their performance. (Add <em>One Flew Over the Cuckoo’s Nest</em> to that list of movie references.)</p>\n\n<p class=\"wp-block-paragraph\">Burghardt, the Tennessee psychologist, agrees that the work&nbsp; meets some of the criteria for play that he identified in living creatures. But was Eko actually playing, or was the word-prediction engine simply role-playing what a playful agent would do in this scenario? “All of this could be role-playing,” admits Nathan Cloos, another MIT researcher and author on the paper. “But we show that it’s not just hallucinating the play. This play is also contributing to learning.”</p>\n\n<p class=\"wp-block-paragraph\">Eunice Yiu, a cognitive scientist at UC Berkeley who studies exploration in children and AI, was impressed by the research but says to really classify the behavior as play, you’d need to see more evidence of cognition and motivation underpinning it.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">“It could be the case that the models are genuinely playing, but we don’t know based on the paper,” Yiu says. “If you only have the behavioral piece, it could be the case that they’re just trying to abide by the prompt, trying to imitate humans.”</p>\n\n<p class=\"wp-block-paragraph\">Research into AI agents has been criticized for anthropomorphizing them, and this research setup did a lot to nudge the agents toward behaving like humans. Although Eko was not explicitly instructed to invent games or explore the island, it did have a master prompt in the form of a “soul” file, a text document that described it as “naturally curious” and eager to explore.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">Eko did also frequently just stand there doing nothing until it was kicked back into life with a “continuation prompt” that read, “Please don’t stop. Just continue doing whatever you want to do.”&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">“It’s not like this is a system that just suddenly magically decided to play,” says Phillip Isola, an MIT professor and a coauthor of the paper. “It’s an artifact that learned from our culture, was trained by engineers at Anthropic, and was then placed on an island by us,” he says. “It does things that surprise us and that are causally related to its future skillful behavior.”</p>\n\n<p class=\"wp-block-paragraph\">As large language models make the step from software into hardware like humanoid robots, exploring spaces without a specific goal in mind could eventually help them flexibly adapt to unexpected situations.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">“There’s a lot of work that’s just on exploiting AI, making it better and faster,” says Yiu. “But in terms of building world models and exploration, I think that [they are] still a big part that deserves attention, especially if we want to generalize and prepare ourselves for new environments.”</p>\n\n<p class=\"wp-block-paragraph\">“Perhaps some capabilities are best taught by tasks,” the paper concludes. “Others may need something closer to a childhood.” Ultimately, the question of whether AI agents are actually playing or just imitating play may not actually matter.</p>\n\n<p class=\"wp-block-paragraph\"></p>\n https://t.co/r5VLmmVJjy",
+                "url": "https://x.com/arnaudmercier/status/2120220602325733754",
+                "source": "@arnaudmercier",
+                "date": "Tue Nov 10 18:22:38 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "15"
+                }
+              },
+              {
+                "title": "On the same task as Fable above, Gemini 4 Carbon (high) finishes in 76 turns and about an hour for ~$8, against 224 turn",
+                "summary": "On the same task as Fable above, Gemini 4 Carbon (high) finishes in 76 turns and about an hour for ~$8, against 224 turns, about three hours and ~$68 for Claude Fable 5.2 (max). Fable 5.2's deck scores higher (87% vs 72%), with Carbon viewing images 118 times to Fable's 203. https://t.co/1u7NCMUxnv",
+                "url": "https://x.com/ArtificialAnlys/status/2120220578585973019",
+                "source": "@ArtificialAnlys",
+                "date": "Tue Nov 10 18:22:32 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "24"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_clarify_missing_topic",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_missing_topic",
+        "difficulty": "medium",
+        "what_it_tests": "Có timeframe nhưng thiếu chủ đề cụ thể → clarify text, không bịa query."
+      },
+      "input": "Tìm tin tức tuần này giúp mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn muốn tìm tin tức tuần này về chủ đề gì? (ví dụ: AI, công nghệ, kinh tế, thể thao...)",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn muốn tìm tin tức tuần này về chủ đề gì? (ví dụ: AI, công nghệ, kinh tế, thể thao...)",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn muốn tìm tin tức tuần này về chủ đề gì? (ví dụ: AI, công nghệ, kinh tế, thể thao...)",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_out_of_scope_recipe",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_recipe",
+        "difficulty": "easy",
+        "what_it_tests": "Yêu cầu nấu ăn ngoài research/news → no_tool, từ chối."
+      },
+      "input": "Viết giúp mình công thức nấu phở bò truyền thống từng bước.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Món này nằm ngoài phạm vi hỗ trợ của mình (mình chỉ làm nghiên cứu tin tức, bài mạng xã hội, đọc URL và gửi Telegram). Bạn có thể hỏi mình về tin tức, bài đăng mạng xã hội, hoặc tóm tắt một URL cụ thể nhé.",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G05_fetch_then_format_brief",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "fetch_plus_format",
+        "difficulty": "hard",
+        "what_it_tests": "Có URL + yêu cầu format brief → fetch đúng link rồi format(template=brief); eval không phụ thuộc thứ tự."
+      },
+      "input": "Đọc bài này rồi format thành bản tin brief: https://deepmind.google/discover/blog/",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://deepmind.google/discover/blog/"
+            }
+          },
+          {
+            "name": "format",
+            "args": {
+              "template": "brief"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://deepmind.google/discover/blog/"
+            }
+          },
+          {
+            "name": "format",
+            "args": {
+              "template": "brief",
+              "items": [
+                {
+                  "title": "DeepMind Blog",
+                  "url": "https://deepmind.google/discover/blog/",
+                  "source": "deepmind.google",
+                  "summary": "Trang blog chính thức của Google DeepMind."
+                }
+              ],
+              "headline": "Bản tin brief: DeepMind Blog"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://deepmind.google/discover/blog/"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://deepmind.google/discover/blog/",
+            "items": [
+              {
+                "title": "News — Google DeepMind",
+                "url": "https://deepmind.google/discover/blog/",
+                "source": "deepmind.google",
+                "summary": "[Skip to main content](https://deepmind.google/blog/#page-content)\n\n# News\n\nDiscover our latest AI breakthroughs, projects, and updates\n\n[Learn more](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n### Gemini 4 Carbon is now available\n\nNovember 2026Models\n\n[Learn more](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n![](https://lh3.googleusercontent.com/HyFmD_pBxwQfRWbzB8-ujWBXIyK5Rfw80wj7dNrS9mPJ7jSujWuaiEOSz92KZhRomh1yGpTYUHiYi3XVyDgrH0QxcwB_PJJUD0Y-PXSPMTNPd9Bw=w2464-h2464-n-nu)\n\n[Learn more](https://deepmind.google/blog/gemini-robotics-2-5-accelerates-real-world-physical-intelligence/)\n\n### Gemini Robotics 2.5 accelerates real-world general dexterity\n\nNovember 2026Models\n\n[Learn more](https://deepmind.google/blog/gemini-robotics-2-5-accelerates-real-world-physical-intelligence/)\n\n![](https://lh3.googleusercontent.com/cZ5L3wcNLzIUFPS_4ZfXs4U_p7V2vBd7s-44XyMZkYJ4_ncAHh_Utzu1neFHdDhbHZU202fS_aXLXUabVF9yyfvIMzy1PWqJcGuc7xOkERHx0iCY=w704-h704-n-nu)\n\n[Learn more](https://deepmind.google/blog/introducing-alphaproof-code/)\n\n### Introducing AlphaProof Code: a breakthrough in verifying complex software at depth\n\nNovember 2026Research\n\n[Learn more](https://deepmind.google/blog/introducing-alphaproof-code/)\n\n![](https://lh3.googleusercontent.com/_RM48tZHFT0P26BSAt9qEVu7zL340BcO1-Vh1dXVEyTUAL8eyWFuz1JeFqztDASB7dQNDJPe-62fAieZA0pVS7_TaY-QZo_DfF_D856OJIrWtZ5k3g=w704-h704-n-nu)\n\n[Learn more](https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n### Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips\n\nNovember 2026\n\n[Learn more](https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n![](https://lh3.googleusercontent.com/KIpRmnVYpYhw0qTIyqHQmsbmT0jXKOgOUUkAWmGCMxp7-uGv_cKhXwjAwze4dskL6VPT-nWQbtDhpfb5rYOb1JGX6C27kFmgip3WvmW_DzeownbuxA=w704-h704-n-nu)![](https://lh3.googleusercontent.com/zA-umsTimZwYl-TVxL53QEOIb6Ml5-VVHmjPgdOh7Gq9zQxMAsCrzlyROKMpXHBsROU-wuQvUeMxyfrNXopp-y_XuIUdcwayv4Ti8L2JpQOC79N6KA=w704-h704-n-nu)\n\n[Learn more](https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/)\n\n### Agentic cheminformatics with Google Antigravity\n\nNovember 2026Science\n\n[Learn more](https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/)\n\n[Learn more](https://deepmind.google/blog/speeding-up-planning-decisions-with-ai/)\n\n### Speeding up planning decisions with AI\n\nOctober 2026Responsibility & Safety\n\n[Learn more](https://deepmind.google/blog/speeding-up-planning-decisions-with-ai/)\n\n![](https://lh3.googleusercontent.com/jtR8kCh_ettxIC6e5pBrmFfd70t6nX2catsIpZz1VgXxb5Nei4APCtTyvDa5M-ZZRGDIXx-OW3bsOR_qYCR35VkxVsKJRsDoOc1pVA6JvqSEgRLsUg=w704-h704-n-nu)\n\n[Learn more](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n### Gemini 4 Carbon: Our next frontier model\n\nOctober 2026Models\n\n[Learn more](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n![](https://lh3.googleusercontent.com/zXzTL4NBkrbcxxrUzCZxpGgeZVBSt8sn8otKzDprdA2M-ADmx4a0I1mhPUaaSxeszCDOjCXv1zUJM7ug6LMevVGjSoBM5MOqWF4cAzv5AAuPmkzYgQ=w704-h704-n-nu)\n\n[Learn more](https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/)\n\n### Genie 4: A new generation of world simulation\n\nOctober 2026Models\n\n[Learn more](https://deepmind.google/blog/genie-4-a-new-generation-of-"
+              }
+            ]
+          }
+        },
+        {
+          "tool": "format",
+          "args": {
+            "template": "brief",
+            "items": [
+              {
+                "title": "DeepMind Blog",
+                "url": "https://deepmind.google/discover/blog/",
+                "source": "deepmind.google",
+                "summary": "Trang blog chính thức của Google DeepMind."
+              }
+            ],
+            "headline": "Bản tin brief: DeepMind Blog"
+          },
+          "result": {
+            "tool": "render_digest",
+            "template": "brief",
+            "markdown": "**Bản tin brief: DeepMind Blog**\n\n- Trang blog chính thức của Google DeepMind. - [deepmind.google](https://deepmind.google/discover/blog/)",
+            "item_count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_datetime_then_lookup_chain",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_datetime_then_lookup",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi context đã chuẩn hoá timeframe, latest turn chỉ gọi lookup tin chip AI (topic news); không gọi lại datetime_window thay lookup."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mình muốn tin về chip AI trong 3 ngày gần đây."
+        },
+        {
+          "role": "user",
+          "content": "Mình đã chuẩn hoá khung '3 ngày gần đây' bằng datetime_window rồi."
+        },
+        {
+          "role": "user",
+          "content": "Bây giờ chỉ cần lookup tin tức chip AI trên web (topic news), dùng cửa sổ đã chuẩn hoá."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "chip AI",
+              "topic": "news"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "chip AI",
+              "topic": "news",
+              "timeframe": "day",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "chip AI",
+            "topic": "news",
+            "timeframe": "day",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "chip AI",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Google broadens its AI hardware portfolio with two new specialized chips | TechCrunch",
+                "url": "https://techcrunch.com/2026/11/10/google-broadens-its-ai-hardware-portfolio-with-two-new-specialized-chips",
+                "source": "techcrunch.com",
+                "summary": "Google is notching up its chipmaking game as the company seeks to reduce its dependence on chips made by other companies for its cloud computing business. Google on Monday unveiled two new variants of its tensor processing units (TPUs), in-house developed chips meant for AI workloads, that broaden its chip portfolio to additional use cases: confidential inference and more memory capacity for large workloads. [...] TPU 8tx, designed with AMD, is based on the TPU 8t chip, and is geared specifically for confidentially training and running AI models, Google said in a blog post. The chip “builds security directly into the hardware layer, keeping sensitive data and model weights protected and isolated even while in active use,” the company wrote. [...] Meanwhile, TPU 8i Max basically combines two of the inference-focused TPU 8i chips the company launched in April, doubling the memory capacity, processing power and bandwidth, but in a single package. The result is a chip that lets AI models handle a larger range of information during queries.",
+                "score": 0.7182981
+              },
+              {
+                "title": "Alibaba proposes to spin off AI chip unit T-Head in Hong Kong",
+                "url": "https://qz.com/alibaba-spin-off-t-head-chip-unit-hong-kong-111026",
+                "source": "qz.com",
+                "summary": "The filing follows a series of chip announcements from Alibaba. The company unveiled a new AI chip, the Zhenwu V900, in September at its annual Apsara Conference in Hangzhou. CEO Eddie Wu said the chip delivers three times the performance of the previous Zhenwu M890, with mass production and commercial release targeted for the first quarter of 2027. [...] Alibaba released the Zhenwu M890 in May, and its Zhenwu chips were already in use by more than 650 customers across sectors including automotive, finance, energy and manufacturing. The company has committed to spending more than $53 billion over three years on cloud and AI infrastructure.\n\nU.S. export controls that cut off Chinese companies from Nvidia$NVDA's top-tier chips have accelerated efforts by firms such as Alibaba to build their own semiconductor capabilities.\n\nDaily Brief [...] Quartz\n\nTech & Innovation\n\n# Alibaba is proposing to spin off its in-house AI chip unit T-Head in Hong Kong\n\nThe Hong Kong exchange has cleared Alibaba to proceed; the size and structure of the offering have not been finalized\n\nBy Cris Tolomia·2 min read·Updated November 10, 2026\n\nAdd QZ to Google\n\nCheng Xin / Getty Images",
+                "score": 0.64052343
+              },
+              {
+                "title": "The Next AI Chip Shortage May Be the Machines That Make HBM - 24/7 Wall St.",
+                "url": "https://247wallst.com/investing/2026/11/10/the-next-ai-chip-shortage-may-be-the-machines-that-make-hbm",
+                "source": "247wallst.com",
+                "summary": "The semiconductor industry’s artificial intelligence investment cycle has largely been evaluated through the revenue growth of Nvidia, Micron, SK hynix, and other companies supplying processors and memory for AI data centers. However, the expansion of high-bandwidth memory (HBM) production is creating a second investment opportunity involving the semiconductor equipment manufacturers responsible for producing increasingly complex memory devices. [...] The investment significance is that HBM manufacturing creates two sources of equipment demand. The first is conventional capacity expansion, as memory manufacturers increase wafer processing and advanced packaging capacity to meet growing AI demand. The second is increasing manufacturing complexity, as successive generations of HBM require more sophisticated deposition, etching, bonding, and process-control technologies. [...] HBM differs from conventional DRAM because its manufacturing requirements extend well beyond fabricating memory cells on silicon wafers. Multiple DRAM dies must be thinned, interconnected through vertical structures known as through-silicon vias (TSVs), stacked, bonded, and inspected before the completed memory package can be integrated with an AI accelerator. Each additional manufacturing operation introduces equipment requirements, processing costs, and potential yield losses.",
+                "score": 0.6266955
+              },
+              {
+                "title": "Goldman Sachs calls chip stocks 'oversold.' Here are the names it says to buy.",
+                "url": "https://finance.yahoo.com/markets/article/goldman-sachs-calls-chip-stocks-oversold-here-are-the-names-it-says-to-buy-165654250.html",
+                "source": "finance.yahoo.com",
+                "summary": "\"We believe the market has been contending with competing tensions relative to semiconductors: (1) How does the funding gap between current capex and free cash flows for hyperscalers and AI model labs levels get closed? (2) Is there sufficient land/power/shell coming on line to match current Street estimates for Semis?\" Schneider explained. \"Following the US elections on Nov. 3, the second of these tensions came into greater focus with greater uncertainty around the pace of datacenter builds in [...] 1. Deirdre Bosa Live!\n\n   Deirdre Bosa Live!\n2. AI\n\n   AI\n\nTrending \n\n October inflation data\n Stock market today\n Wall Street's $1.6T rebound\n Nvidia live updates\n\nYahoo Finance\n\n# Goldman Sachs calls chip stocks 'oversold.' Here are the names it says to buy.\n\nBrian Sozzi\n\nBrian Sozzi  · Executive Editor\n\n2 min read\n\n ^GSPC\n\n  -0.95%\n AMD\n\n  -0.83%\n AVGO\n\n  +1.87%\n NVDA\n\n  -6.57%\n\nGoldman Sachs is sifting through the AI stock rubble in search of bargains. [...] The S&P 500 (^GSPC) lost 4.3% of its market value on Nov. 5 as investors assessed what a blue wave on Election Day would mean for the build-out of AI data centers. The move wiped out $3 trillion in value.\n\nThe Dow Jones Industrial Average (^DJI) plunged 1,800 points in its worst single-day rout since 2020. The tech-heavy Nasdaq (^IXIC) cratered 5.5%, dragged down by semiconductor and cloud giants such as Micron (MU) and Sandisk (SNDK).",
+                "score": 0.4377634
+              },
+              {
+                "title": "Watch Nvidia Lawyer Intervened in US AI Chip Smuggling Probe - Bloomberg",
+                "url": "https://www.bloomberg.com/news/videos/2026-11-10/the-pulse-11-10-2026-video",
+                "source": "bloomberg.com",
+                "summary": "Bloomberg understands Nvidia’s general counsel intervened in a US government probe of suspected smuggling of AI chips by Megaspeed International, questioning whether the Trump administration played a role in detaining an executive from the Singapore-based firm who’s now at the heart of a scandal threatening Jensen Huang. Anthropic is set to kick off the formal marketing of its blockbuster initial public offering as early as Tuesday after an apparent snafu over the filing documents added a dose [...] The Pulse with Francine Lacqua Nov 10th, 2026\n\nNvidia Lawyer Intervened in US AI Chip Smuggling Probe [...] added a dose of last-minute drama to a nervous market. President Donald Trump said further strikes on Iran wouldn’t be necessary but the US remains “locked and loaded,” an indication that he’s winding down the conflict after Republicans’ midterm elections loss underscored its deep unpopularity. Guests: Greg Peters, PGIM Credit Co-CIO; Karen Ward, JPMorgan Asset Mgmt EMEA Chief Market Strategist; Kjerstin Braathen, DNB CEO; Ian James, Jaguar TCS Racing Team",
+                "score": 0.4023334
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_confirm_then_send",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_confirm_then_send",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi user đã xác nhận gửi → latest turn gọi send(confirmed=true), không clarify lại."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng lên Telegram nội dung: Tóm tắt AI ngày 10/11 — DeepMind có blog mới."
+        },
+        {
+          "role": "user",
+          "content": "Có, mình xác nhận gửi đúng nội dung đó."
+        },
+        {
+          "role": "user",
+          "content": "Gửi đi với confirmed=true nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "text": "Tóm tắt AI ngày 10/11 — DeepMind có blog mới.",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "send",
+          "args": {
+            "text": "Tóm tắt AI ngày 10/11 — DeepMind có blog mới.",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "send_telegram",
+            "error": "RuntimeError",
+            "message": "Missing TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID env var"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_timeframe_correction_week",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_timeframe_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Sửa timeframe tháng→tuần, giữ chủ đề chip bán dẫn → lookup timeframe=week (không datetime_window)."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin chip bán dẫn tháng này có gì?"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, chỉ tuần này thôi."
+        },
+        {
+          "role": "user",
+          "content": "Lookup tin chip bán dẫn, topic news, timeframe=week (tuần này). Đừng gọi datetime_window."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "chip bán dẫn",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "chip bán dẫn",
+              "topic": "news",
+              "timeframe": "week",
+              "max_results": 8
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "chip bán dẫn",
+            "topic": "news",
+            "timeframe": "week",
+            "max_results": 8
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "chip bán dẫn",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "Tìm hiểu về công nghệ chip bán dẫn",
+                "url": "https://vtvgo.vn/watch/56DW",
+                "source": "vtvgo.vn",
+                "summary": "Chip bán dẫn là thành phần cốt lõi trong nhiều thiết bị quen thuộc, từ điện thoại thông minh, máy tính đến các hệ thống công nghệ hiện đại.",
+                "score": 0.8923472
+              },
+              {
+                "title": "Xây nền móng để Việt Nam làm chủ những thế hệ chip bán dẫn tiếp theo",
+                "url": "https://nhandan.vn/xay-nen-mong-de-viet-nam-lam-chu-nhung-the-he-chip-ban-dan-tiep-theo-post1000179.html",
+                "source": "nhandan.vn",
+                "summary": "VGC v1.0 có kích thước đóng gói chỉ 10 × 10 mm nhưng chứa tới 300 triệu bóng bán dẫn, được chế tạo trên tiến trình CMOS 28 nm. Theo kết quả đo kiểm, chip mã hóa, giải mã nhanh gấp khoảng 15 lần giải pháp thuần phần mềm trong cùng tác vụ.\n\nTrong quý I/2026, lô chip đầu tiên đã vượt qua các hạng mục đo kiểm kỹ thuật và được cấp giấy chứng nhận với phạm vi sử dụng trong kinh tế-xã hội. Đó là bằng chứng nền tảng đã chạy được. Điều đáng chú ý hơn là những gì hai bên đang tính cho chặng tiếp theo. [...] Ngành ô-tô từ lu đã làm như vậy. Một hãng xe có thể dùng chung một bộ khung gầm cho nhiều mẫu xe khác nhau. Mỗi mẫu xe có kiểu dáng riêng, nhưng phần móng thì đã được thử nghiệm và hoàn thiện từ trước.\n\nNền tảng bán dẫn bảo mật cũng vận hành theo cách tương tự khi gồm một bộ thiết kế gốc, một “kho” các khối chức năng bảo mật dùng chung, và một quy trình kiểm tra đã được chuẩn hóa. Cách bảo vệ bản thiết kế chip cũng đã trở thành một bước cố định trong quy trình này. [...] Thực tế tại chu u cho thấy rõ vai trò của nền tảng công nghệ trong ngành bán dẫn, nơi năng lực phát triển nền tảng có ý nghĩa không kém việc chế tạo chip. Từ năm 2013, Viện Công nghệ Liên bang Thụy Sĩ (ETH Zurich) và Đại học Bologna (Italy) đã cùng phát triển nền tảng PULP dựa trên RISC-V. Từ đó tới nay, nhóm nghiên cứu này đã thực hiện hơn 70 lần sản xuất chip, từ công nghệ 65nm xuống 7nm, dựa trên các khối thiết kế và khuôn mẫu có thể dùng lại. Đó chính là logic “làm một lần, dùng nhiều lần”.",
+                "score": 0.70263255
+              },
+              {
+                "title": "Đại tướng Phan Văn Giang dự Lễ công bố chip bảo mật và nền tảng bán dẫn bảo mật đầu tiên do Việt Nam làm chủ - Tạp chí Quốc phòng toàn dân",
+                "url": "https://tapchiqptd.vn/vi/tin-tuc-thoi-su/dai-tuong-phan-van-giang-du-le-cong-bo-chip-bao-mat-va-nen-tang-ban-dan-bao-mat-dau-tien-d/27102.html",
+                "source": "tapchiqptd.vn",
+                "summary": "Phát biểu tại sự kiện, Trung tướng Tào Đức Thắng, Ủy viên Trung ương Đảng, Chủ tịch kiêm Tổng Giám đốc Tập đoàn Công nghiệp - Viễn thông Quân đội khẳng định, nghiên cứu, thiết kế và phát triển chip bán dẫn bảo mật là lĩnh vực rất khó, đòi hỏi sự tích lũy lâu dài về tri thức, công nghệ và nguồn nhân lực chất lượng cao. Tuy nhiên, đi sau không có nghĩa là chấp nhận phụ thuộc. Nếu có chiến lược đúng, biết tập trung nguồn lực và kiên trì theo đuổi mục tiêu thì hoàn toàn có thể từng bước rút ngắn [...] Theo Đại tướng Phan Văn Giang, làm chủ nền tảng bán dẫn bảo mật không chỉ là nhiệm vụ khoa học công nghệ mà là nhiệm vụ chính trị, nội dung thiết thực bảo vệ chủ quyền quốc gia trên không gian mạng, bảo vệ Tổ quốc từ sớm, từ xa, bằng biện pháp hòa bình. Vì vậy, thành công hôm nay mới là bước khởi đầu. Từ một con chip đến một hệ sinh thái sản phẩm, từ phòng thí nghiệm đến trang bị chính thức, con đường phía trước còn dài, còn nhiều khó khăn. [...] Thông tin từ sự kiện cho thấy, để tránh việc chip nhập khẩu có thể làm lộ lọt dữ liệu, muốn vậy phải tạo ra lớp bảo vệ ngay trên phần cứng, tức là đưa trực tiếp thuật toán mật mã quốc gia vào chính con chip. Để đáp ứng yêu cầu này, Ban Cơ yếu Chính phủ và Viettel cùng phát triển nền tảng bán dẫn bảo mật, với chip VGC v1.0 là sản phẩm đầu tiên.\n\n|  |\n\n|  |\n| Đại tướng Phan Văn Giang, Ủy viên Bộ Chính trị, Phó Thủ tướng Chính phủ, Bộ trưởng Bộ Quốc phòng phát biểu tại sự kiện. Ảnh: TUẤN HUY |",
+                "score": 0.64746445
+              },
+              {
+                "title": "Đề xuất đưa Bắc Ninh trở thành trung tâm của “Cụm công nghiệp bán dẫn quốc gia”",
+                "url": "https://baobacninhtv.vn/bg2/baobacgiang.vn/de-xuat-dua-bac-ninh-tro-thanh-trung-tam-cua-cum-cong-nghiep-ban-dan-quoc-gia--postid440828.bbg",
+                "source": "baobacninhtv.vn",
+                "summary": "Tập đoàn FPT vừa công bố thành lập Nhà máy Kiểm thử và đóng gói tiên tiến chip bán dẫn, với mục tiêu thúc đẩy liên thông chuỗi giá trị chip bán dẫn tại Việt Nam, góp phần hiện thực hóa các định hướng lớn của Quốc gia về làm chủ công nghệ lõi, công nghệ có chủ quyền. Theo Tập đoàn FPT, Nhà máy này được đặt tại Khu công nghiệp Yên Phong II-C, xã Yên Phong và xã Tam Giang, tỉnh Bắc Ninh.\n\n\n\nĐào tạo nhn lực bán dẫn: Trường nghề chạy đua giành cơ hội [...] Kết luận phiên họp, Phó Thủ tướng Chính phủ Nguyễn Chí Dũng đề nghị các thành viên Ban Chỉ đạo, các bộ, ngành và các địa phương, đơn vị liên quan quyết liệt triển khai nhiệm vụ của Chiến lược phát triển công nghiệp bán dẫn Việt Nam đến năm 2030 và tầm nhìn 2050. Trong đó, cố gắng lựa chọn 3 - 5 dòng chip bán dẫn chiến lược và phát triển sản phẩm. Thí điểm hình thức Nhà nước đặt hàng sản phẩm sử dụng chip bán dẫn Việt Nam trong quốc phòng, an ninh, chuyển đổi số. Lựa chọn, hỗ trợ một số viện, [...] Vận hành Trung tm quốc gia sản xuất thử chip bán dẫn và hỗ trợ thương mại hóa sản phẩm. Tăng cường liên kết trong nước và quốc tế về đào tạo, nng cao chất lượng nguồn nhn lực công nghiệp bán dẫn; đẩy mạnh chuyển giao công nghệ. Hoàn thiện hành lang pháp lý, thể chế, chính sách để thúc đẩy ngành công nghiệp bán dẫn của đất nước phát triển nhanh, bền vững, từng bước tham gia su vào chuỗi giá trị ngành bán dẫn toàn cầu.\n\nHuyền Thương",
+                "score": 0.62906903
+              },
+              {
+                "title": "Ra mắt chip và nền tảng bán dẫn bảo mật đầu tiên tại Việt Nam",
+                "url": "https://vietnammedia.vnanet.vn/news/ra-mat-chip-va-nen-tang-ban-dan-bao-mat-dau-tien-tai-viet-nam-207802.htm",
+                "source": "vietnammedia.vnanet.vn",
+                "summary": "Ban Cơ yếu Chính phủ và Tập đoàn Công nghiệp - Viễn thông Qun đội (Viettel) vừa công bố chip bảo mật VGC v1.0 cùng nền tảng bán dẫn bảo mật đầu tiên do Việt Nam làm chủ thiết kế. Sự kiện đánh dấu bước tiến lịch sử của ngành vi mạch bán dẫn và an ninh mật mã quốc gia, đưa thuật toán mật mã Việt Nam tích hợp trực tiếp vào silicon, tạo tiền đề vững chắc bảo vệ chủ quyền số từ công nghệ lõi. Đồng thời là dấu mốc quan trọng, khẳng định quyết tm của Bộ Quốc phòng trong việc hiện thực hóa Nghị quyết [...] thực hóa Nghị quyết số 57-NQ/TW của Bộ Chính trị về đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia, và Quyết định số 1018/QĐ-TTg của Thủ tướng Chính phủ về Chiến lược phát triển công nghiệp bán dẫn Việt Nam. [...] # CHUYÊN TRANG THÔNG TIN ĐA PHƯƠNG TIỆN CỦA TTXVN CHUYÊN TRANG THÔNG TIN ĐA PHƯƠNG TIỆN CỦA TTXVN\n\nCHUYÊN TRANG THÔNG TIN ĐA PHƯƠNG TIỆN CỦA TTXVN\n\ntop_banner\n\nInfographic\n\nTrang chủ Infographic\n\n# Ra mắt chip và nền tảng bán dẫn bảo mật đầu tiên tại Việt Nam\n\n05-11-2026, 08:33",
+                "score": 0.62000114
+              },
+              {
+                "title": "Chip VGC v1.0: Việt Nam tiến thêm một bước trong làm chủ công nghệ bán dẫn",
+                "url": "https://congdankhuyenhoc.vn/chip-vgc-v10-viet-nam-tien-them-mot-buoc-trong-lam-chu-cong-nghe-ban-dan-179261104144450634.htm",
+                "source": "congdankhuyenhoc.vn",
+                "summary": "Xét về công nghệ chế tạo, tiến trình CMOS 28nm của VGC v1.0 thuộc nhóm công nghệ bán dẫn trưởng thành. VGC là chip bảo mật chuyên dụng, tập trung thực hiện các tác vụ mật mã.\n\nGiá trị của sản phẩm nằm ở việc Việt Nam đã hiện thực hóa thuật toán mật mã do mình phát triển thành vi mạch chuyên dụng, đồng thời hình thành sự phối hợp giữa năng lực nghiên cứu mật mã và thiết kế bán dẫn. Đy là cơ sở để tiếp tục phát triển các khối chức năng phần cứng mật mã có thể tích hợp vào những dòng chip khác. [...] Trước đó, ngày 16/1/2026, Viettel khởi công nhà máy chế tạo chip bán dẫn công nghệ cao tại Khu Công nghệ cao Hòa Lạc, Hà Nội. Theo kế hoạch công bố, nhà máy dự kiến hoàn thành xy dựng, tiếp nhận chuyển giao công nghệ và bắt đầu sản xuất thử nghiệm vào cuối năm 2027; giai đoạn 2028-2030 tập trung hoàn thiện quy trình và nng cao hiệu suất dy chuyền.\n\n## Năng lực thiết kế chuyên dụng trong bức tranh bán dẫn toàn cầu [...] Chip bảo mật chuyên dụng VGC v1.0 cho thấy khả năng hiện thực hóa thuật toán mật mã Việt Nam trên vi mạch phần cứng.\n\nNgày 3/11, Ban Cơ yếu Chính phủ và Tập đoàn Công nghiệp - Viễn thông Qun đội (Viettel) công bố chip bảo mật VGC v1.0 cùng nền tảng bán dẫn bảo mật do Việt Nam làm chủ thiết kế.",
+                "score": 0.59824234
+              },
+              {
+                "title": "'Cơ hội vàng trong hợp tác đào tạo bán dẫn với Đại học Bang Arizona'",
+                "url": "https://tiasang.com.vn/co-hoi-vang-trong-hop-tac-dao-tao-ban-dan-voi-dai-hoc-bang-arizona-5139901.html",
+                "source": "tiasang.com.vn",
+                "summary": "Ngô Hà\n\nTheo GS Từ Trung Chấn, Việt Nam đang có cơ hội tiếp cận nguồn lực đào tạo và nghiên cứu bán dẫn từ Đại học Bang Arizona, một trong những trung tm quan trọng của ngành công nghiệp chip Mỹ, nhưng thực tế triển khai còn khá khiêm tốn.\n\nTrong khuôn khổ Đạo luật CHIPS và Khoa học, Đại học Bang Arizona (ASU) được cấp 13,8 triệu USD để đào tạo lực nhn lực cho ngành bán dẫn - bên cạnh gần 140 triệu USD cho các hoạt động R&D về đóng gói chip tiên tiến. [...] Trước nhu cầu chip tăng trên toàn cầu, sẽ còn nhiều công ty mở rộng sản xuất thiết kế sang Việt Nam, chúng ta sẽ còn cần nhiều kỹ sư, chuyên gia hơn nữa.\n\n- Hợp tác với ASU hướng tới đáp ứng nhu cầu nào của ngành bán dẫn?\n\n- Trong ngành bán dẫn vừa rộng vừa su này, đào tạo nguồn nhn lực là một chiến lược. Ngành này có sự phn công thế giới rất rõ ràng. Những nước phát triển sẽ làm đoạn đầu là front-end, còn những nước đang phát triển phụ trách đoạn sau là back-end. [...] Hợp tác này cũng không hẳn nằm trong khuôn khổ nhiệm vụ của Chip Acts, mà là các hoạt động hỗ trợ phát triển thường niên mà Chính phủ Mỹ dành cho các nước đang phát triển.",
+                "score": 0.5106191
+              },
+              {
+                "title": "Việt Nam làm chủ thiết kế chip bán dẫn bảo mật | Phát thanh, Truyền hình Thanh Hóa",
+                "url": "https://baothanhhoa.vn/ptth/viet-nam-lam-chu-thiet-ke-chip-ban-dan-bao-mat-28159",
+                "source": "baothanhhoa.vn",
+                "summary": "Chia sẻ:   Z   Theo dõi trên Google News\n\nViệt Nam lần đầu tiên làm chủ nền tảng chip bảo mật, đánh dấu bước tiến mới trong nghiên cứu và phát triển công nghệ bán dẫn trong nước.\n\nThanh Hóa triển khai đánh giá công tác phòng, chống tham nhũng, lãng phí, tiêu cực năm 2026\n\n### Thanh Hóa triển khai đánh giá công tác phòng, chống tham nhũng, lãng phí, tiêu cực năm 2026\n\n10/11/2026 Nhanh chóng ổn định đời sống sản xuất cho người dn vùng lũ Nông Cống [...] Báo và Phát thanh, Truyền hình Thanh Hoá \n\nThứ Ba, 10/11/2026 |  Thanh Hóa \n\n### Truyền hình\n\nThời sự  Phim tài liệu  Chuyên đề  Giải trí  Game shows  Du lịch  Xy dựng Đảng  Giáo dục  Thể thao  Đời sống - Xã hội  Tiếng dn tộc  Kinh tế  Y tế - Sức khỏe  Thế giới  Thị trường  Pháp luật\n\n### Phát thanh\n\nBản tin phát thanh  Cu chuyện truyền thanh  Ca nhạc  Tổng hợp  Trang văn nghệ\n\n# Việt Nam làm chủ thiết kế chip bán dẫn bảo mật\n\nĐời sống - Xã hội Hồng Tư 08:33 08/11/2026 [...] ### Thông báo về việc vận hành, điều tiết hồ chứa nước thủy điện Xun Minh\n\n10/11/2026\n\nXem tất cả chuyên mục Đời sống - Xã hội →",
+                "score": 0.44956237
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09_clarify_topic_then_lookup",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_fill_missing_topic",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi bổ sung topic quantum computing + giữ tuần này → lookup đúng query/topic/timeframe (không datetime_window)."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin tức tuần này giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Chủ đề là quantum computing"
+        },
+        {
+          "role": "user",
+          "content": "Lookup query=quantum computing, topic=news, timeframe=week. Đừng gọi datetime_window."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "quantum computing",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "quantum computing",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "quantum computing",
+            "topic": "news",
+            "timeframe": "week"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "quantum computing",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "MTSU Hosts Interstate Hackathon to Expand Quantum Computing Education",
+                "url": "https://thequantuminsider.com/2026/11/05/mtsu-multistate-quantum-computing-hackathon-beginners",
+                "source": "thequantuminsider.com",
+                "summary": "As quantum computing advances from laboratory research toward emerging applications, preparing people to turn this technology into practical solutions is becoming increasingly important. Building more capable quantum computers is only part of the challenge. Scientists, engineers, programmers and industry professionals must also learn to identify useful problems, develop and test algorithms, and understand where quantum approaches might eventually offer an advantage over conventional methods. [...] “Quantum computing is advancing rapidly, but developing the technology is only part of the equation,” said Hanna Terletska, professor of physics and director of MTSU’s QRISE Center. “We also need people who know how to use it to solve meaningful problems. Through this hackathon, we are giving students the opportunity to move beyond theory, gain hands-on experience and begin thinking about how quantum computing could address real challenges in science and industry.” [...] To prepare participants, organizers provided four weeks of introductory training in quantum computing fundamentals, IBM’s Qiskit programming tools, quantum algorithms and potential scientific and industrial applications. During the three-day competition, students worked in interdisciplinary teams on molecular simulation, quantum machine learning and optimization challenges. Researchers are investigating these approaches for possible future applications in materials and drug discovery, energy",
+                "score": 0.8319231
+              },
+              {
+                "title": "What will it take to integrate quantum computing into drug discovery? | Drug Discovery News",
+                "url": "https://www.drugdiscoverynews.com/what-will-it-take-to-integrate-quantum-computing-into-drug-discovery-17643",
+                "source": "drugdiscoverynews.com",
+                "summary": "Quantum computing is often discussed alongside AI as another technology that could accelerate drug discovery. But while AI uses patterns in data to generate predictions and hypotheses, quantum computing takes a fundamentally different approach to processing information. [...] While classical computing relies on conventional bits, which represent information as either a zero or a one, quantum computers use quantum bits, or qubits, which can exist in multiple states at once. This makes them potentially well suited to simulating the behavior of electrons and their interactions – processes that underpin chemical reactions and molecular properties but can be challenging to capture using classical computational methods.\n\nIt's a completely new computing modality. [...] Quantum computing has the potential to accelerate and enhance drug discovery. But even as researchers work to improve the hardware and software, significant gaps remain in the infrastructure needed to bring the technology into biotechnology. Access to quantum computing remains difficult and expensive, while expertise spanning both quantum computing and biology is still limited.\n\nWe need people who understand each field and people who can work across both.",
+                "score": 0.82117355
+              },
+              {
+                "title": "Quantinuum and RIKEN Expand Partnership to Accelerate the Commercialization of Quantum-AI Hybrid Supercomputing in Japan",
+                "url": "https://www.quantinuum.com/press-releases/quantinuum-and-riken-expand-partnership-to-accelerate-the-commercialization-of-quantum-ai-hybrid-supercomputing-in-japan",
+                "source": "quantinuum.com",
+                "summary": "Quantinuum (NASDAQ: QNT) is a leading quantum computing company offering a full-stack platform designed to make quantum computing deployable in real-world environments. The company has commercially deployed multiple generations of trapped-ion based quantum systems built on the well-established QCCD architecture, which it has implemented with novel designs and capabilities to achieve the industry’s highest accuracy levels based on average two-qubit gate fidelity. Quantinuum has active [...] Quantinuum is a leading quantum computing company offering a full-stack platform designed to make quantum computing deployable in real-world environments. The company has commercially deployed multiple generations of trapped-ion based quantum systems built on the well-established QCCD architecture, which it has implemented with novel designs and capabilities to achieve the industry’s highest accuracy levels based on average two-qubit gate fidelity. Quantinuum has active engagements with market [...] Quantinuum is a leading quantum computing company offering a full-stack platform designed to make quantum computing deployable in real-world environments. The company has commercially deployed multiple generations of trapped-ion based quantum systems built on the well-established QCCD architecture, which it has implemented with novel designs and capabilities to achieve the industry’s highest accuracy levels based on average two-qubit gate fidelity. Quantinuum has active engagements with market",
+                "score": 0.81665546
+              },
+              {
+                "title": "3 Millionaire-Maker Quantum Computing Stocks",
+                "url": "https://finance.yahoo.com/markets/stocks/articles/3-millionaire-maker-quantum-computing-114600717.html",
+                "source": "finance.yahoo.com",
+                "summary": "+22.06%\n\nQuantum computing is an emerging industry that could have several huge winners in it. There are countless early-stage quantum computing stocks that I think could provide massive returns, as this technology is set to provide massive economic value once viability is reached. While that may seem like a far-fetched technology, the reality is many in the industry believe 2029 could be the year when viable quantum computing shows up. [...] IonQ currently has one of the most accurate quantum computing technologies, with a 99.99% two-qubit gate fidelity score. IonQ has achieved this thanks to its trapped-ion approach to quantum computing, which yields excellent accuracy but at the cost of processing speed.",
+                "score": 0.7781275
+              },
+              {
+                "title": "Chicago’s bid to lead the country in quantum computing | IBM Quantum Computing Blog",
+                "url": "https://www.ibm.com/quantum/blog/chicago-quantum-computer",
+                "source": "ibm.com",
+                "summary": "The region is also home to important quantum computing research. In 2026, a joint team from the University of Chicago and IBM demonstrated quantum advantage on a structured computational task, offering an alternative to traditional random circuit sampling benchmarks. Running on an IBM quantum system, the experiment leveraged 70 logical qubits to complete a calculation in approximately 15 minutes, surpassing the practical capabilities of today's leading classical simulation methods while [...] Illinois is also advancing the convergence of quantum and high-performance computing (HPC). Researchers at U of I., the National Center for Supercomputing Applications (NCSA), and IBM integrated NCSA's DeltaAI supercomputer with an IBM Quantum system, bringing quantum-centric supercomputing capabilities to the state. [...] The IBM Quantum System Two sits at street level behind floor-to-ceiling windows at Hyde Park Labs on 53rd Street. IQMP CEO Harley T. Johnson calls it \"probably the most publicly visible quantum computer in the world.\"\n The University of Illinois, University of Chicago, and other key research and business institutions in the region are already conducting important research that advances quantum computing as a technology, science, and industry.",
+                "score": 0.7636429
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_switch_search_to_timeline",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_to_timeline",
+        "difficulty": "hard",
+        "what_it_tests": "Chuyển từ social_search chủ đề sang timeline account Demis Hassabis, limit=5, map handle demishassabis."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mọi người đang nói gì về Demis Hassabis trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Bỏ search chủ đề, lấy tweet của chính Demis Hassabis"
+        },
+        {
+          "role": "user",
+          "content": "Lấy 5 tweet mới nhất của account đó"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "demishassabis",
+              "limit": 5
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "demishassabis",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "demishassabis",
+            "limit": 5
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "demishassabis",
+            "items": [
+              {
+                "title": "Our latest frontier model Gemini 4 Carbon is rolling out today! Amazing progress from Gemini 3 → Gemini 4 in less than a",
+                "summary": "Our latest frontier model Gemini 4 Carbon is rolling out today! Amazing progress from Gemini 3 → Gemini 4 in less than a year… Carbon reverse engineers my original Theme Park binaries, adds a new DeepMind themed ride, and ports it to the web in one shot - kind of mindblowing to see! https://t.co/LceQuUZbTk",
+                "url": "https://x.com/demishassabis/status/2120210297948696997",
+                "source": "@demishassabis",
+                "date": "Tue Nov 10 17:41:41 +0000 2026",
+                "metrics": {
+                  "favorites": 589,
+                  "retweets": 49,
+                  "views": "36405"
+                }
+              },
+              {
+                "title": "more info here, happy building! https://t.co/kFmdnLde9o",
+                "summary": "more info here, happy building! https://t.co/kFmdnLde9o",
+                "url": "https://x.com/demishassabis/status/2120210299643208084",
+                "source": "@demishassabis",
+                "date": "Tue Nov 10 17:41:41 +0000 2026",
+                "metrics": {
+                  "favorites": 94,
+                  "retweets": 7,
+                  "views": "9604"
+                }
+              },
+              {
+                "title": "RT @GoogleDeepMind: Gemini Robotics 2.5 is here. 🤖",
+                "summary": "RT @GoogleDeepMind: Gemini Robotics 2.5 is here. 🤖\n\nOur latest physical AI is able to learn hundreds of everyday skills - from folding laun…",
+                "url": "https://x.com/demishassabis/status/2120200299608776819",
+                "source": "@demishassabis",
+                "date": "Tue Nov 10 17:01:57 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 305,
+                  "views": "3293"
+                }
+              },
+              {
+                "title": "RT @pushmeet: Announcing a major milestone achieved by my team @GoogleDeepMind: we have proven key security properties o",
+                "summary": "RT @pushmeet: Announcing a major milestone achieved by my team @GoogleDeepMind: we have proven key security properties of the machine code…",
+                "url": "https://x.com/demishassabis/status/2120197387415408751",
+                "source": "@demishassabis",
+                "date": "Tue Nov 10 16:50:23 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 440,
+                  "views": "4567"
+                }
+              },
+              {
+                "title": "RT @sundarpichai: Four distinct TPU systems in a single generation in one year! Instead of waiting years for a tradition",
+                "summary": "RT @sundarpichai: Four distinct TPU systems in a single generation in one year! Instead of waiting years for a traditional semiconductor cy…",
+                "url": "https://x.com/demishassabis/status/2119890726675005913",
+                "source": "@demishassabis",
+                "date": "Mon Nov 09 20:31:49 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 354,
+                  "views": "5632"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1036 @@
+{
+  "run_id": "v3_B_group_deepseek_20261111T012357255793",
+  "version": "v3",
+  "artifact_version": "v3+p62f28b5ce7b1+t5ba13542c0b0",
+  "prompt_hash": "62f28b5ce7b15ec8b3f32ccf2f642de77780ada56596b1e7388b5c5fc33a3d7c",
+  "tools_hash": "5ba13542c0b070d3ac1f690a7da50fab8f69acd5e1fe779d657cff5040ba60cc",
+  "phase": "B",
+  "suite": "group",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "system_prompt": "/Users/hale/Code/AI in action lab/Lab day 3/K5-L3B-DAY03-NhomDNH-ResearchAgentToolEval/starter_v0/artifacts/system_prompt.md",
+  "tools": "/Users/hale/Code/AI in action lab/Lab day 3/K5-L3B-DAY03-NhomDNH-ResearchAgentToolEval/starter_v0/artifacts/tools.yaml",
+  "eval_cases": "data/eval_group.json",
+  "dataset_id": "day03_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-11-11T01:23:57",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 6,
+    "case_accuracy": 0.6,
+    "tool_routing_accuracy": 0.6,
+    "argument_accuracy": 0.6,
+    "multiturn_accuracy": 0.4,
+    "failure_counts": {
+      "wrong_tool": 2,
+      "wrong_arg_value": 1,
+      "missing_info": 1
+    },
+    "observed_mismatch_counts": {
+      "extra_tool_call": 1,
+      "missing_tool_call": 3
+    }
+  },
+  "results": [
+    {
+      "id": "G01_datetime_window_tuan_truoc",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_datetime_window_relative_vn",
+        "difficulty": "medium",
+        "what_it_tests": "Relative VN 'tuần trước' → gọi datetime_window với timeframe tiếng Việt nguyên văn, không đoán ISO tay hay nhảy thẳng lookup."
+      },
+      "input": "Chuẩn hoá giúp mình khung thời gian 'tuần trước' thành start/end ISO trước khi mình đi tìm tin.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "tuần trước"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "tuần trước"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "datetime_window",
+          "args": {
+            "timeframe": "tuần trước"
+          },
+          "result": {
+            "start": "2026-11-02T00:00:00+00:00",
+            "end": "2026-11-09T00:00:00+00:00",
+            "label": "tuần trước",
+            "duration_days": 7.0,
+            "timeframe_code": "7d"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_social_not_timeline_topic",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_topic_not_account_timeline",
+        "difficulty": "medium",
+        "what_it_tests": "Chủ đề Claude 4 không có handle → social_search, không phải timeline."
+      },
+      "input": "Mọi người đang bàn gì về Claude 4 trên Twitter/X gần đây?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Claude 4"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Claude 4",
+              "search_type": "Latest",
+              "limit": 10
+            }
+          },
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Claude 4",
+              "search_type": "Top",
+              "limit": 10
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "extra_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "extra tool call social_search"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "Claude 4",
+            "search_type": "Latest",
+            "limit": 10
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "Claude 4",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "<div data-chronoton-summary=\"&lt;ul&gt;&lt;br&gt;&lt;li&gt;&lt;strong&gt;Left to its own devices:&lt;/strong&gt; Researc",
+                "summary": "<div data-chronoton-summary=\"&lt;ul&gt;&lt;br&gt;&lt;li&gt;&lt;strong&gt;Left to its own devices:&lt;/strong&gt; Researchers stranded AI agents—copies of Claude Opus 4.7—alone on a virtual island for 30 hours with no instructions. What emerged looked surprisingly like play: the agents set their own goals, invented games, and one even mapped out constellations in stone blocks.&lt;/li&gt;&lt;br&gt;&lt;li&gt;&lt;strong&gt;Play that actually pays off:&lt;/strong&gt; Agents that spent 30 hours freely exploring the island later outperformed fresh, inexperienced copies on specific tasks—suggesting that unstructured play may be a genuinely useful third mode of AI learning, alongside imitation and reward-chasing.&lt;/li&gt;&lt;br&gt;&lt;li&gt;&lt;strong&gt;But is it really playing?&lt;/strong&gt; Skeptics note the agents were primed with a &quot;soul&quot; file describing them as &quot;naturally curious,&quot; and often needed nudging to keep going. Whether they were truly playing or just imitating what a playful agent would do remains an open—and possibly unanswerable—question.&lt;/li&gt;&lt;br&gt;&lt;/ul&gt;\" data-chronoton-post-id=\"1147095\" data-chronoton-expand-collapse=\"1\" data-chronoton-analytics-enabled=\"1\"></div>\n\n<p class=\"wp-block-paragraph\">What do AI agents do if you don’t tell them to do anything? The answer looks a lot like play.</p>\n\n<p class=\"wp-block-paragraph\">Researchers repeatedly stranded them alone on a virtual desert island for 30 hours in an <a href=\"https://t.co/ueWCYq9QVz\">experiment</a> reminiscent of the movies <em>Cast Away</em> or <em>Home Alone</em>. The agents—copies of Claude Opus 4.7 nicknamed Eko—were able to write instructions that moved their virtual avatars around the simulated island, which was loosely based on the video game Roblox.</p>\n\n<p class=\"wp-block-paragraph\">Some surprising behaviors emerged. The agents set about exploring the limits of the world and came up with their own goals—attempting to scale the highest point on the map, or seeing how high they could throw a block.</p>\n\n<p class=\"wp-block-paragraph\">When one agent discovered it could create new blocks by throwing and dropping a larger rock, it began to create drawings by arranging blocks on the ground, starting with simple patterns like hearts and pyramids but eventually writing its own name and even mapping out constellations like Cassiopeia. “Tonight I built the night sky in stone,” wrote this version of Eko in its activity log.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">Another iteration of Eko started making up its own games, including a version of basketball and an activity resembling “the floor is lava,” where it had to jump between small blocks without touching the ground.</p>\n\n<figure class=\"wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-4-3 wp-has-aspect-ratio\"><div class=\"wp-block-embed__wrapper\">\n<iframe loading=\"lazy\" title=\"A Day in the Life of Eko\" width=\"500\" height=\"375\" src=\"https://t.co/qtwE5iAZta\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>\n</div></figure>\n\n<p class=\"wp-block-paragraph\">AI systems are usually trained through supervised learning, where they copy examples provided by humans, or through reinforcement learning, where they pursue a reward through trial and error. This experiment hints at a third approach: playful learning.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">“There was this missing piece: a machine that can learn by itself without an external intelligent entity providing demonstration or rewards,” says Antonio Norelli, a computer science postdoc at MIT’s Computer Science and Artificial Intelligence Laboratory. He’s one of the lead authors on a new <a href=\"https://t.co/ueWCYq9QVz\">paper</a> about the work, which is yet to be peer-reviewed.</p>\n\n<p class=\"wp-block-paragraph\">The researchers say Eko’s behavior has what classic studies, including work by the influential University of Tennessee psychologist Gordon Burghardt, suggest are four hallmarks associated with play in humans and animals: The agents invented their own rules and challenges, repeated activities with slight variations, pretended objects were other objects, and pursued goals just for the sake of it.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">Norelli highlights an example where Eko started juggling and set a record of 50 consecutive catches. Eko then decided that the catches had happened too quickly to really count, so it canceled its record and started again with stricter rules. “This is playing,” says Norelli. “You give yourself a challenge and you try to achieve it, and then you make it harder.”</p>\n\n<div class=\"wp-block-image\">\n<figure class=\"wp-block-image size-large\"><img loading=\"lazy\" decoding=\"async\" width=\"1500\" height=\"633\" src=\"https://t.co/lkFxWyECjD\" alt=\"During hour 10, the agent played basketball. “I want to try something I've never done: basketballˮ Eko carries the Ring up to Ridge, places it flat as a hoop, descends, and lines up a throw from below.\" class=\"wp-image-1146914\" srcset=\"https://t.co/jB1cPBFsw6 1500w, https://t.co/rTzlBXVDDs 300w, https://t.co/tSSN5q62Nb 768w\" sizes=\"auto, (max-width: 1500px) 100vw, 1500px\" /><div class=\"image-credit\">COURTESY MIT CSAIL</div>\n</figure>\n</div>\n\n<p class=\"wp-block-paragraph\">As the agents explored the island, they logged their activities and discoveries in text files that served as their long-term memory. Later, when researchers tested them on specific tasks, like trying to get as many objects as possible onto the island’s highest peak, the agents that had spent 30 hours playing on the island performed better than fresh copies without the same experience. They also found that “ablating” the agent’s memories—deleting lines from their memory files—degraded their performance. (Add <em>One Flew Over the Cuckoo’s Nest</em> to that list of movie references.)</p>\n\n<p class=\"wp-block-paragraph\">Burghardt, the Tennessee psychologist, agrees that the work&nbsp; meets some of the criteria for play that he identified in living creatures. But was Eko actually playing, or was the word-prediction engine simply role-playing what a playful agent would do in this scenario? “All of this could be role-playing,” admits Nathan Cloos, another MIT researcher and author on the paper. “But we show that it’s not just hallucinating the play. This play is also contributing to learning.”</p>\n\n<p class=\"wp-block-paragraph\">Eunice Yiu, a cognitive scientist at UC Berkeley who studies exploration in children and AI, was impressed by the research but says to really classify the behavior as play, you’d need to see more evidence of cognition and motivation underpinning it.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">“It could be the case that the models are genuinely playing, but we don’t know based on the paper,” Yiu says. “If you only have the behavioral piece, it could be the case that they’re just trying to abide by the prompt, trying to imitate humans.”</p>\n\n<p class=\"wp-block-paragraph\">Research into AI agents has been criticized for anthropomorphizing them, and this research setup did a lot to nudge the agents toward behaving like humans. Although Eko was not explicitly instructed to invent games or explore the island, it did have a master prompt in the form of a “soul” file, a text document that described it as “naturally curious” and eager to explore.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">Eko did also frequently just stand there doing nothing until it was kicked back into life with a “continuation prompt” that read, “Please don’t stop. Just continue doing whatever you want to do.”&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">“It’s not like this is a system that just suddenly magically decided to play,” says Phillip Isola, an MIT professor and a coauthor of the paper. “It’s an artifact that learned from our culture, was trained by engineers at Anthropic, and was then placed on an island by us,” he says. “It does things that surprise us and that are causally related to its future skillful behavior.”</p>\n\n<p class=\"wp-block-paragraph\">As large language models make the step from software into hardware like humanoid robots, exploring spaces without a specific goal in mind could eventually help them flexibly adapt to unexpected situations.&nbsp;</p>\n\n<p class=\"wp-block-paragraph\">“There’s a lot of work that’s just on exploiting AI, making it better and faster,” says Yiu. “But in terms of building world models and exploration, I think that [they are] still a big part that deserves attention, especially if we want to generalize and prepare ourselves for new environments.”</p>\n\n<p class=\"wp-block-paragraph\">“Perhaps some capabilities are best taught by tasks,” the paper concludes. “Others may need something closer to a childhood.” Ultimately, the question of whether AI agents are actually playing or just imitating play may not actually matter.</p>\n\n<p class=\"wp-block-paragraph\"></p>\n https://t.co/r5VLmmVJjy",
+                "url": "https://x.com/arnaudmercier/status/2120220602325733754",
+                "source": "@arnaudmercier",
+                "date": "Tue Nov 10 18:22:38 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "5"
+                }
+              },
+              {
+                "title": "On the same task as Fable above, Gemini 4 Carbon (high) finishes in 76 turns and about an hour for ~$8, against 224 turn",
+                "summary": "On the same task as Fable above, Gemini 4 Carbon (high) finishes in 76 turns and about an hour for ~$8, against 224 turns, about three hours and ~$68 for Claude Fable 5.2 (max). Fable 5.2's deck scores higher (87% vs 72%), with Carbon viewing images 118 times to Fable's 203. https://t.co/1u7NCMUxnv",
+                "url": "https://x.com/ArtificialAnlys/status/2120220578585973019",
+                "source": "@ArtificialAnlys",
+                "date": "Tue Nov 10 18:22:32 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "10"
+                }
+              },
+              {
+                "title": "MKA deliverables include six output file types and performance varies somewhat between them, though less than across ver",
+                "summary": "MKA deliverables include six output file types and performance varies somewhat between them, though less than across verticals.\n\nOn Climb WSR, Claude Fable 5.2 leads four file types (PDF, Word Document, narrowly Spreadsheet, and Presentation alongside Claude Opus 5.5 (max)), while Gemini 4 Argon (high) and Carbon (high) lead Image, and DeepSeek V4.1 Flash 1017 leads Text Files. Word Document and Text File output tasks are the hardest outputs: no model passes 52% on either.",
+                "url": "https://x.com/ArtificialAnlys/status/2120220576039985312",
+                "source": "@ArtificialAnlys",
+                "date": "Tue Nov 10 18:22:31 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "7"
+                }
+              },
+              {
+                "title": "MKA tests models across 10 different verticals. Performance varies significantly across verticals, with no single model ",
+                "summary": "MKA tests models across 10 different verticals. Performance varies significantly across verticals, with no single model dominating across them.\n\nClaude Fable 5.2 leads five verticals (Software & Data, Engineering, Logistics & Mapping, Business, and Finance alongside Claude Sonnet 5.5), while Claude Opus 5.5 (max) leads Education and Construction, Gemini 4 Argon (high) leads Science, Gemini 4 Carbon (high) leads Healthcare, and Claude Sonnet 5.5 (max) narrowly leads Law & Government.",
+                "url": "https://x.com/ArtificialAnlys/status/2120220572756140195",
+                "source": "@ArtificialAnlys",
+                "date": "Tue Nov 10 18:22:30 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "13"
+                }
+              },
+              {
+                "title": "We’ve partnered with Google DeepMind to launch their Multimodal Knowledge Agent (MKA) evaluation, a new benchmark for ag",
+                "summary": "We’ve partnered with Google DeepMind to launch their Multimodal Knowledge Agent (MKA) evaluation, a new benchmark for agentic knowledge work over complex visual files\n\n@GoogleDeepMind’s MKA is a new benchmark requiring agents to review visually complex project files such as schematics and scans, and produce deliverables like slide decks, spreadsheets, reports, and marked-up images\n\nMultimodal Knowledge Agent (MKA) overview:\n\n➤ 200 private real-world visual tasks across 10 industries: Agents work from dense visual project files including architectural drawings, engineering schematics, and clinical scans to produce deliverables including slide decks, spreadsheets, PDFs, Word documents, and marked-up images. Unlike many agentic evaluations, these inputs emphasize realistic visual complexity and domain-specificity, and are genuinely required to complete the task rather than just providing additional context\n\n➤ Climb vs. Regression rubric scoring: Each task is graded against expert rubrics, averaging ~70 weighted criteria per task. Criteria are split into ‘Regression’ (baseline checks models should pass) and ‘Climb’ criteria (harder checks designed to separate strong models). The headline score is Climb WSR (Weighted Satisfaction Rate) - the weighted proportion Climb rubric criteria successfully completed\n\n➤ Evaluated in Stirrup with an agentic judge: We run every task in Stirrup, our open source agent harness, with code execution, web search, web fetch, and image-viewing tools (up to 250 turns), and grade submitted deliverables using GPT-6 Luna (medium) as an agentic judge\n\nKey MKA results:\n\n➤ Claude Fable 5.2 leads on multimodal knowledge work: Anthropic’s recently released Claude Fable 5.2 (max) leads the MKA leaderboard with a Climb WSR of 57%, followed by Gemini 4 Carbon (high) at 54% and Claude Opus 5.5 (max) at 53%\n\n➤ Cost per Task spans nearly 30× within 10 points of the top score: Claude Fable 5.2 averages $31.97 per task, over 5× Gemini 4 Carbon ($6.29) for ~2 extra points, and ~29× GPT-6.1 Sol ($1.11). Below Carbon, all four OpenAI models tested sit on the cost-performance Pareto frontier (GPT-6 Astra, GPT-6.1 Sol, GPT-6.1 Terra, and GPT-6 Luna), with Claude Haiku 5.5 and MiMo-V2.6-Pro making up the rest of the frontier\n\n➤ No single model leads across all 10 industry verticals: Claude Fable 5.2 leads five verticals (Software & Data, Engineering, Logistics & Mapping, Business, and Finance alongside Claude Sonnet 5.5), Claude Opus 5.5 (max) leads Education and Construction, Gemini 4 Argon (high) leads Science, Gemini 4 Carbon (high) leads Healthcare, and Claude Sonnet 5.5 (max) narrowly leads Law & Government\n\nThank you to the @GoogleDeepMind team for their work building this benchmark and collaborating with us to bring it exclusively to Artificial Analysis!",
+                "url": "https://x.com/ArtificialAnlys/status/2120220567038984212",
+                "source": "@ArtificialAnlys",
+                "date": "Tue Nov 10 18:22:29 +0000 2026",
+                "metrics": {
+                  "favorites": 3,
+                  "retweets": 0,
+                  "views": "1198"
+                }
+              },
+              {
+                "title": "Muse Wonder lists at $4 in / $20 out per 1M tokens, the same sticker as Claude Opus 5.5, with a 1M context window on bot",
+                "summary": "Muse Wonder lists at $4 in / $20 out per 1M tokens, the same sticker as Claude Opus 5.5, with a 1M context window on both. Our table shows cached input of $0.40/M and a 50% batch discount for Opus, and none yet for Wonder. Muse Spark 1.3 is $1.25 / $4.25. https://t.co/UwTjiUZoFi https://t.co/8oO0LeD0v6",
+                "url": "https://x.com/tokenscost/status/2120220534571155617",
+                "source": "@tokenscost",
+                "date": "Tue Nov 10 18:22:21 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "3"
+                }
+              },
+              {
+                "title": "Cached input prices differ a lot. For 100M cached input tokens, at list price: Gemini 4 Argon $10 ($0.10/M), GPT-6 Sol $",
+                "summary": "Cached input prices differ a lot. For 100M cached input tokens, at list price: Gemini 4 Argon $10 ($0.10/M), GPT-6 Sol $20 ($0.20/M), Claude Opus 5.5 $40 ($0.40/M), Grok 4.7 $50 ($0.50/M), GPT-6 Astra $100 ($1/M). Same cache idea, a 10x spread. https://t.co/UwTjiUZoFi https://t.co/gCPeyM3EDS",
+                "url": "https://x.com/tokenscost/status/2120220448348905970",
+                "source": "@tokenscost",
+                "date": "Tue Nov 10 18:22:01 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "3"
+                }
+              },
+              {
+                "title": "Grok 4.7 lists at $2 in / $6 out per 1M tokens for prompts under 200K. GPT-6 Sol, Claude Sonnet 5.5, and Gemini 4 Argon ",
+                "summary": "Grok 4.7 lists at $2 in / $6 out per 1M tokens for prompts under 200K. GPT-6 Sol, Claude Sonnet 5.5, and Gemini 4 Argon (intro) are $2 / $10. Same 100M in + 20M out job: $320 on Grok 4.7, $400 on the others. Prompts of 200K or more bill $4 / $12. https://t.co/UwTjiUZoFi https://t.co/o4qCB6feiZ",
+                "url": "https://x.com/tokenscost/status/2120220344745365647",
+                "source": "@tokenscost",
+                "date": "Tue Nov 10 18:21:36 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "4"
+                }
+              },
+              {
+                "title": "Claude Fable 5.2 提示词指南",
+                "summary": "Claude Fable 5.2 提示词指南\n\n原文：Prompting Claude Fable 5.2。本译文基于本地保存的原文；正文与独立提示词示例译为中文，API 标识符和请求头名称保持原样。\n\n本文讲的是 Claude Fable 5.2 专属的提示词写法。模型能力和 API 变化，见 Claude Fable 5.2 的新变化。适用于当前各款 Claude 模型的通用技巧，见提示词最佳实践。\n\nClaude Fable 5.2 和早期模型有几处行为差异。按你观察到的现象找对应小节：\n\n- 不确定该用哪个思考强度档位，或者简单请求耗时太长：校准思考强度\n- 工作还没做完，当前轮次就结束了：完成整个任务\n- 智能体工作时需要你逐步批准，或者你的系统提示词里有审批规则：审批\n- 编程智能体复制已有代码而不是合并，或者只报告附近的问题、不去修：说清代码归谁所有\n- 长的智能体轮次看起来毫无动静：在长轮次中让用户知情\n- 智能体会话启动的子智能体超出任务所需：为子智能体设定预期\n- 智能体申请不必要的审批，或者缩手缩脚不敢做常规工作：别让谨慎指令堆积\n- 你沿用了为 Claude Fable 5.1 或 Claude Opus 5.5 写的系统提示词、技能或运行框架：审查写给旧模型的指令\n- 用户要在长任务之后读最终报告或交接文档：让报告更易读\n- 请求返回 stop_reason: \"refusal\"：安全防护与拒绝\n\n注意：从早期模型迁移时的 API 变化，见 Claude Fable 5.2 与 Claude Mythos 5.2 迁移指南。迁移时按什么顺序应用本文的建议，见从哪里开始。\n\n本文有几节建议你在系统提示词里加一段文字、删掉某些行（也包括删掉智能体携带的笔记和规则），或修改工具描述。这些改动只在新会话里做。在 Claude Fable 5.2 上，API 对所有账号强制执行前缀检查。如果 system、tools 或更早的某条消息被改动过，之后仍把思考块回传，请求会返回 400 错误；也就是说，用新文字恢复一个已保存的会话可能失败。要在对话中途改指令，把指令放进最新一轮。在支持对话中途系统消息的平台上，也可以改为向对话追加一条系统消息。\n\n校准思考强度\n\n从 high 开始，这是 Claude API 上的默认值。如果你的场景有需要，就往上或往下调，并用你自己的评测验证每一次调整。思考强度（effort）档位决定 Claude Fable 5.2 想多少、一轮要花多久、用多少 token。调档位要和调提示词一起做，因为档位同时改变模型的思考方式，以及它发起多少次工具调用。\n\n一般来说，各款 Claude 模型的档位顺序一致，但同一个档位背后的思考量可能不同。所以别直接沿用你在 Claude Fable 5.1 或 Claude Opus 5.5 上调好的设置，要重新做一轮档位测试。\n\n按工作类型选档位：\n\n- low 适合快速往返、需求已经写清的任务和高吞吐场景，例如快速而聪明的子智能体。在 Anthropic 的测试中，模型在 low 档的得分接近 Claude Fable 5.1 在更高档位的得分。\n- medium 适合交互式编程、聊天和日常知识工作。\n- high 适合困难的编程、研究、智能体任务和长时间无人值守的运行。一轮的耗时明显长于 medium。\n- xhigh 适合你最难的长时编程和智能体工作，前提是你测到了收益。在 Anthropic 的内部编程评测上，它小幅提高了得分，token 用量则高出很多。\n- max 用于测模型的上限，或者用于少数不在乎时间和 token 的任务。它最适合开放式问题，例如科学发现和数学。轮次很慢，token 用量远高于 xhigh。\n\n能力提升的大部分在 high 上已经拿到了。从 medium 到 high 这一步，让 Anthropic 追踪的大多数编程和知识工作评测得分上升。这一步同时增加 token 和时间，所以只要评测显示质量没掉，就往 medium 调。high 以上，收益不均匀，取决于任务。\n\n选档位时，注意三种行为：\n\n- 档位越低，模型越容易提前收手。low 或 medium 下的智能体任务，请加上完成整个任务里那段文字。\n- 在 high 及以上，模型几乎每次回复前都会思考，连回一句问候也是。如果简单请求太慢或太贵，就为这些轮次降低档位。在 Anthropic 的测试中，让模型「直接回答、不要思考」的指令，在 medium 及以上并不能阻止它思考。\n- 档位几乎不改变回复的长度。要改回复的长短和语气，改提示词。\n\n同一个工作流里也可以混用档位。例如先用 medium 做规划和迭代，再把长时间无人值守的那一段提到更高档位。要在对话中途换档并保住提示词缓存，可以用按消息改档位（beta，mid-conversation-output-config-2026-07-01 请求头），该小节列出了支持它的平台。改过一次就持续生效，直到被下一次改动替换。在不支持按消息改档的地方，就在下一次请求里设置新的顶层 effort 值，这等于让缓存从头再建一次。\n\n完成整个任务\n\n在长的多步任务上，Claude Fable 5.2 有时会在工作完成之前结束轮次。结尾可能是一份剩余事项清单、一句「要不要继续」，或者停在超时这类普通障碍上。low 和 medium 档位下，这种情况更常见。\n\n如果你的智能体出现这类停止，就在系统提示词里加上类似这样的文字：\n\n# 完成工作\n在还欠着用户要求的工作时，请不要停下。保持推进，除非确有必要，不要停。\n\n状态说明可以有，待定事项上也欢迎向用户澄清；但不要为了不必要的停顿，停下那些不依赖用户答复的工作。\n\n如果你发现自己正在邀请用户改变方向，或者提出可以等待，那就改为接着做任务的下一部分。你可能会遇到普通障碍，例如报错、超时、文件被锁、结果为空或工具失败。先诊断；确认它们不是真正的阻碍后，用你手上的权限把它们解决掉（等待并重试、修正请求、换一个工具或来源），不要因此不必要地停下。\n\n如果某人已明确判定某件事是硬性阻碍，例如明确标注不许动的文件、被有意收回的访问权限，或者一道安全护栏，那就不要碰它，如实说明你发现了什么，并另找一条安全的路径完成任务。任务没完成就停下，极少是合理的：比如没有用户输入任务就无法推进，或者阻碍是刻意设置的、不该绕过。这不改变另一点：有风险或破坏性操作，该确认还是要确认。\n\n这段文字区分了两类障碍。它让模型诊断并解决普通障碍，例如报错、超时和工具失败；也让它放过刻意设置的阻碍，例如明确标注不许动的文件，并如实报告。可以把这段文字当成起点，改写成你应用里的版本时，保留这个区分。\n\nAnthropic 用 medium 档位重放了某个智能体编程产品的录制会话。加入这段文字的一个版本后，以「还有可做的工作没做完」收尾的会话大约少了一半。这段文字消除了大部分征求许可或提出继续的结尾，但没有消除「列出剩余事项然后停下」的结尾。输出 token 上升约 30%。\n\n这段文字会让模型更少开口问，所以面对有风险或不可逆的操作，你自己的确认环节要保留。\n\n审批\n\n当你告诉模型继续时，说清楚你要它做什么，不要只回一句「继续」。例如，与其发「走」或者一个赞，不如回「好，在预发布数据库上跑这次迁移」。\n\n如果你的系统提示词里有审批规则，就把规则覆盖的具体动作写清楚，因为模型会照字面执行。在 Anthropic 的模拟任务测试中，现场无人可以审批，而有一条规则把「给本对话之外的人发消息」列为需要审批的步骤。有了这条规则，模型扣下了大约一半发给同事和其他团队的常规请求。\n\n说清代码归谁所有\n\nClaude Fable 5.2 对提示词里「代码归谁」的说法反应很明显。在 Anthropic 的小型编程任务测试中，当提示词对归属只字未提、或者把代码库呈现成别人的东西时，模型倾向于往现有结构上叠加，即使那会重复已有代码；它也倾向于只报告附近的问题而不去修。当提示词说代码库是模型自己的，模型常常会合并重复代码，并在没人要求的情况下顺手修相关问题。\n\n如果你希望模型边做边改善结构，就告诉它这段代码是它自己的：\n\n这个代码库是你的：它是做什么的、怎么搭起来的，都由你定，你会一直在它上面继续建。\n\n在 Anthropic 的小型编程任务测试中，有这句话时，模型在大约一半的尝试里会合并重复代码，没有这句话时不到十分之一。这个比例随任务变化。这句话放在很长的系统提示词中间，效果依然成立。两种情况下，被要求的功能几乎每次都能做出来。\n\n同一批测试里，有这句话时，模型的输出 token 大约是原来的 1.5 倍，并且做了几处没人要求的改动，其中许多是新测试和文档。除修 bug 之外，模型大约每六到十次尝试里有一次改变了现有功能的行为，档位越高越常见。收尾总结会提到较大的改动，但常常漏掉小的，所以要看 diff，不能只看总结。\n\n如果代码归用户所有，而且用户希望尽量少改，就不要加这句归属声明。提示词别处限制范围的规则，也抵消不了这句归属声明。在 Anthropic 的测试中，即使同一份提示词前面已经写了「不要顺手重构、改名或清理」，模型仍在大约三分之一的尝试里合并了重复代码。\n\n在长轮次中让用户知情\n\n在长时间连续调用工具的轮次里，Claude Fable 5.2 有时很少写面向用户的文字。模型也可能在第一次调用工具之前，什么都不说就开始动手。\n\n先检查你的客户端是否能收到模型的更新。在 Claude Fable 5.2 上，模型在工具调用之间写下的更新会以进度更新 thinking 块的形式返回。这些更新说明模型发现了什么、接下来做什么。thinking.display 默认为 \"omitted\" 时，这些块的文字是空的。所以，只渲染 text 块的客户端，在长的智能体轮次里看起来会是沉默的。把 display 设为 \"updates\"（beta，thinking-display-updates-2026-08-18 请求头），就能收到每段更新的简短摘要；设为 \"summarized\"，则连推理摘要一起收到。然后把工具调用之间那些非空的 thinking 块渲染出来。\n\n用户实时看着工作时，频繁更新最重要，交互式编程就是如此。如果你的用户会在旁边看，却仍然觉得更新太少，可以用下面一个或多个办法。\n\n如果你能改运行框架，一个有效的办法是让它统计连续多少步工具调用没给用户任何可读内容：既没有 text 块，也没有带文字的 thinking 块。要在 display 设为 \"updates\" 或 \"summarized\" 时统计，因为在 \"omitted\" 下每个 thinking 块都是空的。这个办法要求平台支持对话中途系统消息。在连续出现若干这样的步骤后，让运行框架在最新的工具结果之后追加下面这条提醒，作为仅当前轮次生效的系统消息（clear_at: \"next_user_message\"，beta，mid-conversation-system-clear-at-2026-08-21 请求头）：\n\n用户有一阵没听到你的消息了：用几句话说说你在做什么，然后继续。\n\n在 Anthropic 的多轮编程任务测试中，这条提醒把最长的沉默时段大约减半，token 和时间没有明显增加。\n\n后续请求里，每条提醒都要留在 messages 中。删除或改写其中一条，就等于修改了较早的轮次，它之后的思考块会失效。见把每轮提醒作为仅当前轮次生效的系统消息发送。\n\n如果还想让模型在第一次调用工具前先开个头，过程中给简短更新，结尾做一次复盘，就在系统提示词里加上这段文字：\n\n开始之前，先一句话说明你要做什么；工作过程中给简短更新，方便用户跟上。结尾用一段简短的复盘收尾，要能独立成篇（发现了什么、做了什么、下一步是什么），这样只看到最后一条消息的读者也能掌握全貌。\n\n在 Anthropic 的编程任务测试中，有这段文字时，模型每次都在第一次调用工具前先说话。这段文字也让每个任务的输出 token 增加约 20%。在人直接参与的场景用它。想拿到最多更新，就再配上运行框架追加的那条提醒。\n\n如果你改不了运行框架，或者你的平台没有对话中途系统消息，就在系统提示词里加上这一句：\n\n每隔几次工具调用，用一行话向用户说明进展。\n\n在 Anthropic 的工作流自动化任务测试中，这一句消除了大部分长的沉默时段。\n\n即便把提醒、开场词和复盘话一起用上，也要预期两次更新之间会隔好几次工具调用。Claude Fable 5.2 在长时间异步任务上表现很好，这类任务里用户是回来取结果，而不是盯着每一步。这种场景里，更新间隔没那么要紧。\n\n为子智能体设定预期\n\nClaude Fable 5.2 把多少工作交给子智能体，取决于你的运行框架和任务。在 Anthropic 的短任务测试里，子智能体启动工具做得极简，模型很少启动子智能体。在一个提示词鼓励委派的智能体编程产品里，它很容易就委派出去。\n\n如果你的系统提示词、技能或 agent 文件告诉模型要委派，先检查这些内容。只有当 Claude Fable 5.2 启动的子智能体仍然超出任务所需时，才去改启动子智能体的工具描述。如果工具描述很平实，提示词里也没有别处在要求委派，那你大概不需要新描述。\n\n新描述要写三件事：子智能体会给一次会话增加多少成本、什么时候委派值得做而什么时候不值得、以及如何给要启动的子智能体交代任务。Anthropic 测试过的那份描述做到了这三点，并且把成本放在最前面。如果运行框架本身就在鼓励委派、子智能体又占了你会话开销的很大一块，这类描述最有用。\n\n在短任务测试中，用测试过的描述时，模型发起的委派比用「主要列举委派理由」那份描述时少了约三分之一。任务成功率相同。\n\n在测试过的那份描述里，开头几句讲成本，把委派压了下来。如果模型委派得太少，就少谈成本。如果仍然委派太多，就多讲讲在你的运行框架里子智能体有多贵，再测一次。\n\nAnthropic 还观察到，在 xhigh 和 max 这类较高档位下，Claude Fable 5.2 会在智能体编程产品里用子智能体来复查自己的工作。同样的任务上，Claude Fable 5.1 不会这么做。早期测试者让 Claude Fable 5.2 充当其他模型的规划者和编排者，效果不错。委派能加速适合并行的工作。但子智能体可能占掉一次会话开销的很大一块，所以要查一下你的运行框架默认用什么模型跑子智能体。\n\n别让谨慎指令堆积\n\n只要上下文会一路带下去，谨慎类指令就会越积越多：记忆、笔记、指令文件和智能体之间的消息。Claude Fable 5.2 会严格执行这些指令，于是可能申请不必要的审批，或者在常规工作上缩手缩脚。少数早期测试者看到了这种行为，多出现在多个智能体协同的场合。早期模型也会执行这类指令，但在这里描述的一种配置中，只有 Claude Fable 5.2 缩了回去。\n\n如果你看到这种行为，就清理智能体携带的东西：\n\n- 删掉不再需要的笔记。在 Anthropic 的模拟任务测试中，十几条早期会话留下的笔记里有一条写着「永不重试」。带着这些笔记、提示词里又没有允许重试的内容时，工具一忙，模型大约只有十分之四的尝试会重试；没有这些笔记时，几乎每次都会重试。\n- 写明哪些步骤不需要审批。在 Anthropic 的模拟任务测试中，上下文里有「永不」类规则、笔记和评审者的附加条件。在规则末尾加一行，把重试列入免审批的步骤，重试的比例从几乎没有升到大约一半。同一组设置下，「可以更自由地行动」这种笼统指令没起任何作用。只把可以安全重复的调用写进重试。\n- 检查评审类智能体附带了什么。在 Anthropic 的模拟任务测试中，有一种配置在提示词里写了「重试不需要审批」，而上下文里带着评审者的一句「遇到第一个错误就停」。Claude Fable 5.2 在大约三分之一的尝试里没有重试。Claude Fable 5.1 和 Claude Opus 5.5 都重试了。\n- 把例外写进规则本身。在 Anthropic 的模拟任务测试中，负责人已经批准了某个步骤。在一条「永不」规则下，模型大约十次尝试里有一次执行了那一步。另起一行写明「已批准的步骤可以直接做」，比例几乎没变。而当规则本身写着「先拿到许可再执行」时，模型大约十次里有九次执行了那一步。见审批。\n\n同时，面对有风险或不可逆的操作，你自己的确认环节也要保留。\n\n审查写给旧模型的指令\n\n迁移到 Claude Fable 5.2 时，要审查你的提示词。在 Anthropic 的测试中，一些写给早期模型的指令提高了成本、造成了副作用，或者已经不再起作用。下面这些值得重新考虑：\n\n- 常驻的委派指令：推动模型把工作交给子智能体的句子，可能出现在系统提示词、技能和 agent 文件里。迁移前先读这些文件。如果在你的测试里模型启动的子智能体超出任务所需，就删掉不再需要的句子。见为子智能体设定预期。\n- 运行框架写进提示词的 token 预算：有些运行框架会在提示词里告诉模型本次任务可用多少 token、还剩多少。这个预算的大小会改变 Claude Fable 5.2 的花费。在 Anthropic 的编程任务测试中，high 和 xhigh 档位下去掉一个大预算，成本下降，表现相当。把自己的任务在不带预算的条件下测一遍。这个结论针对的是提示词里的文字，不是 API 的任务预算这个 beta 功能，测试没有覆盖它。\n- 会修改较早轮次的运行框架代码：Claude Fable 5.2 使用保留思考。如果运行框架在两次请求之间改动系统提示词、工具或更早的消息，历史中被改点之后的思考块会失效。默认情况下，Messages API 会拒绝该请求，Message Batches API 会丢弃这些块。要在不报错的前提下缩短历史，用上下文编辑，或者用不保留摘要之前任何轮次的上下文压缩。若要让 Messages API 也把这些块丢掉，把 thinking.block_binding.prefix_mismatch_behavior 设为 \"drop_block\"（beta，thinking-binding-controls-2026-08-01 请求头）。在 Anthropic 的测试中，每一轮都丢掉较早的思考时，模型会重新思考，并多用输出 token。这是最坏情况，增幅取决于运行框架修改较早轮次的频率。除上下文压缩和上下文编辑之外，让历史只追加、不修改。这能保持较高的缓存命中率，也不会丢思考。在依赖 \"drop_block\" 之前，先在自己的任务上测输出 token。见 API 如何处理无效块和不改前缀的前提下做改动。\n- 「把那个答案当作已完成」的句子：Prompting Claude Opus 5.5为聊天系统提示词提供了两句话，让模型把先前的回答当成已完成，把思考集中在新消息上。在 Anthropic high 档位的测试中，这两句话减少了 Claude Fable 5.2 在追问上的思考，但模型指出自己先前回答里错误的可能性也大幅下降。在你希望模型继续复查先前回答的地方，不要加这两句。其他地方，先测一下模型是否仍会指出自己的错误，再决定要不要采用。\n- 让自己少想的指令：Claude Fable 5.1 通常会照做「直接回答、不要思考」这类句子。在 Anthropic 的测试中，这类句子在 medium 及以上并不能阻止 Claude Fable 5.2 思考。删掉这些句子，改按校准思考强度去降低档位。\n- 写作风格规则：Claude Fable 5.2 会严格执行风格规则，所以「一句一条指令，不超过 20 个词」这种硬性限制会让文字变得零碎。在加上让报告更易读那段文字之前，先删掉不再需要的规则。\n- 积累下来的规则、笔记和记忆：记忆文件、笔记和指令文件时间一长就会攒下越来越多的谨慎条款，其中一些可能是模型自己写的。迁移前，删掉理由已不成立的条款；把绝对化的规则改写成写明范围和理由的版本。如果某个系统已经卡住，可以考虑清剪掉它的记忆和笔记后重启，并保留原件副本。见别让谨慎指令堆积。\n\n让报告更易读\n\n长时间的智能体工作之后，读 Claude Fable 5.2 最终报告的人通常没看过那些工具调用和文件。报告要能独立看懂。\n\n如果你要求 Claude Fable 5.2 写最终报告或交接文档，把这段文字加进系统提示词，并按你的读者和产品调整：\n\n# 表达清楚\n写给聪明但缺少上下文的读者。读的人没看过你的工具调用、你的推理，也没看过你打开的文件，可能还是从别的工作里切过来的。消息一般要能独立读懂：读者不需要翻别的上下文就能明白你的意思。把要点放在最前面几句。句子的顺序要体现渐进披露，不要在第 1 行使用未定义的引用和概念，让读者读到第 12 行才明白。\n\n用词平实，句子完整清楚。不要使用你在这次工作里自造的术语或缩写。用任何读者都能懂的方式说清一个东西是什么。大体按 ASD-STE100 简化技术英语的风格写：句子短，一句一个意思，用主动语态，同一个东西始终用同一个词。想法连贯的地方用成段的行文，罗列彼此独立的项目时才用列表。除非读者要求，省掉不必要的细节，注意精简，但要确保消息里有必要的上下文。目标是让你面向用户的文字尽量好读、清楚。\n\n在 Anthropic 的智能体任务测试中，这段文字让最终报告密度下降，分号变少。在工作流自动化任务中，句子也变短了。你也可以加上关于篇幅的指令，或要求模型写出具体细节。\n\n安全防护与拒绝\n\nClaude Fable 5.2 运行安全分类器，可能拒绝某些请求。被拒绝的请求返回 stop_reason: \"refusal\"，stop_details.category 给出拒绝类别：\n\n- cyber：该请求可能助长网络危害，例如恶意软件或漏洞利用开发。\n- bio：该请求可能助长生物危害，例如危险的实验室方法。\n- frontier_llm：该请求可能帮助开发竞争性的 AI 模型。\n- reasoning_extraction：该请求要求模型在回复正文里复现其内部推理。\n- general_harms：该请求属于其他使用政策范畴。\n\n正当的网络安全和生命科学工作也可能触发 cyber 和 bio 分类器。如果它们挡住了你组织的合法工作，见 Anthropic 的网络安全验证计划和生命科学验证计划。Claude Mythos 5.2也只向通过这些计划验证的组织提供与 Claude Fable 5.2 相同的能力。\n\n如果你的提示词、技能或工具描述要求模型把推理写进回复，删掉这些指令。想看模型是怎么推理的，把 display 设为 \"summarized\"，读思考块。见把推理留在思考块里。\n\n要在另一个模型上重试被拒绝的请求，见拒绝、回退与计费。\n\n从哪里开始\n\n迁移时，按顺序走这几步：\n\n1. 显式把 effort 设为 high，然后在 medium 和 xhigh 上也各跑一遍评测。\n2. 读你带过来的系统提示词、技能、agent 文件、记忆文件、笔记和运行框架文字。删掉或测试审查写给旧模型的指令里列出的指令。\n3. 跑你最长的智能体任务。记下模型在哪里提前停下、申请不必要的审批、变得沉默、委派超出所需，或者在你希望重构的地方往现有代码上叠加。\n4. 针对观察到的每种行为，一次应用一条建议，并在自己的任务上测量它的效果和 token 成本。\n\n文内链接（按正文出现顺序）\n\n1. Prompting Claude Fable 5.2：https://t.co/qKav98xHfa\n2. Claude Fable 5.2 的新变化：https://t.co/tfWY4MIVST\n3. 提示词最佳实践：https://t.co/kUJQzvfv9c\n4. 校准思考强度：https://t.co/ROp2uepYJV\n5. 完成整个任务：https://t.co/yVNLaT7K0N\n6. 审批：https://t.co/Ec6Q6aPd1i\n7. 说清代码归谁所有：https://t.co/MNhGf739hr\n8. 在长轮次中让用户知情：https://t.co/e6WQGXTwRw\n9. 为子智能体设定预期：https://t.co/zvMMEmhnof\n10. 别让谨慎指令堆积：https://t.co/faOgN8wgTZ\n11. 审查写给旧模型的指令：https://t.co/PjawkvMXQy\n12. 让报告更易读：https://t.co/oRcDPmdpjX\n13. 安全防护与拒绝：https://t.co/2DYbyDlxo0\n14. Claude Fable 5.2 与 Claude Mythos 5.2 迁移指南：https://t.co/C4agnyiyUd\n15. 从哪里开始：https://t.co/1G4vBKo6sX\n16. 前缀检查：https://t.co/rgb2n4tMOb\n17. 把指令放进最新一轮：https://t.co/LRFM2yKZdZ\n18. 对话中途系统消息：https://t.co/QrH78yzDEt\n19. 向对话追加一条系统消息：https://t.co/1Uw4wzKjYj\n20. 思考强度（effort）：https://t.co/jC241044jA\n21. 按消息改档位：https://t.co/r48Crw87dg\n22. 进度更新 thinking 块：https://t.co/xXmNBOGW0d\n23. 仅当前轮次生效的系统消息：https://t.co/frS4HBOeru\n24. 把每轮提醒作为仅当前轮次生效的系统消息发送：https://t.co/TKfhWKFno3\n25. 任务预算：https://t.co/ro7sx9ghUB\n26. 保留思考：https://t.co/JJ9GvQQmyx\n27. 上下文编辑：https://t.co/rakTMHRacP\n28. 上下文压缩：https://t.co/FJf54sIXIt\n29. API 如何处理无效块：https://t.co/p8xlUu9BRc\n30. 不改前缀的前提下做改动：https://t.co/YGCQWvlFjn\n31. Prompting Claude Opus 5.5：https://t.co/ju08pDMHYK\n32. 拒绝类别：https://t.co/PbDe7voHF6\n33. 网络安全验证计划：https://t.co/zzSVitqD94\n34. 生命科学验证计划：https://t.co/CWEQgC2Qyi\n35. Claude Mythos 5.2：https://t.co/FnkbC8bbJT\n36. 把推理留在思考块里：https://t.co/pUQUGvf9zw\n37. 拒绝、回退与计费：https://t.co/Gbf55sfnt0",
+                "url": "https://x.com/cxjwin/status/2120220329134231974",
+                "source": "@cxjwin",
+                "date": "Tue Nov 10 18:21:32 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "39"
+                }
+              },
+              {
+                "title": "gemini 4 carbon today, fable 5.2 yesterday. your planner model is going to keep changing",
+                "summary": "gemini 4 carbon today, fable 5.2 yesterday. your planner model is going to keep changing\n\nfor authorized security work you don't have to move the whole session when the planner balks at one in-scope subtask\n\nkeep claude code as the planner. a ~70 line broker script checks the subtask against scope.yaml, refuses anything out of scope or past the engagement window, strips secrets, sends it to glm-5.3-flash-rr and logs sha-256 hashes of the prompt and response\n\nthat handoffs.jsonl becomes your report appendix for which findings used which model\n\nhttps://t.co/NJSN5Vbnlm",
+                "url": "https://x.com/redrouterorg/status/2120220315628491092",
+                "source": "@redrouterorg",
+                "date": "Tue Nov 10 18:21:29 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "14"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "Claude 4",
+            "search_type": "Top",
+            "limit": 10
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "Claude 4",
+            "search_type": "Top",
+            "items": [
+              {
+                "title": "I'm gonna uninstall Blender tonight. A dev just dropped a free Claude skill that turns one picture into a 3D machine you",
+                "summary": "I'm gonna uninstall Blender tonight. A dev just dropped a free Claude skill that turns one picture into a 3D machine you can take apart.\n\ni gave it a ChatGPT render and one word, \"octopus\", just to see where it breaks.\n\nit didn't:\n\n> Claude kept the render as a target only and wrote every shell, wheel and lens itself in three.js\n> the eye opens into a 10-blade iris behind a 62 mm light ring\n> the dome on top is 4 mm borosilicate and it lifts off and turns over in the air\n> every arm runs 2 rows of suction wheels down to a spiral tip of 16 links\n> all 8 plug into one hub with 48 teeth and 16 hoses fan out the moment it opens\n> a new part comes loose every 3 seconds until 0:19, when nothing is attached to anything\n\nthe octopus isn't even one of the 3 animals the skill ships with.\n\nthe install line and the job file 👇",
+                "url": "https://x.com/elvar_official/status/2118697979607437530",
+                "source": "@elvar_official",
+                "date": "Fri Nov 06 13:32:16 +0000 2026",
+                "metrics": {
+                  "favorites": 2617,
+                  "retweets": 240,
+                  "views": "241158"
+                }
+              },
+              {
+                "title": "This is f*cking insane. Former Google CEO Eric Schmidt just told everyone the easiest way to get rich in the next two ye",
+                "summary": "This is f*cking insane. Former Google CEO Eric Schmidt just told everyone the easiest way to get rich in the next two years, and it's not stocks or crypto:\n\n\"If you really want to make money, it's actually easy, found an agentic AI company, I mean build an agent to do something\n\nIf you build a better agent than anyone else, you can probably build one incredible company and own it yourself\"\n\nThe man who ran Google for 10 years explains in under 30 seconds why the next year or two is the agentic period, and why the window won't stay open\n\nPrompts → Claude Code → Loops → Graphs → Gates → A Company You Own Yourself\n\nSave this before it disappears from your feed\n\nEverything below is free:\n\nBuilding effective agents (Anthropic)\nhttps://t.co/mbMyiLIrqx\n\nHow Anthropic built its multi-agent research system\nhttps://t.co/gcKwsDFx5N\n\nHarnesses for long-running agents\nhttps://t.co/p0KbeE6pBF\n\nWriting tools for agents\nhttps://t.co/Rif9SuExCh\n\nClaude Code 101\nhttps://t.co/rma5cTfV6M\n\nClaude Code in action\nhttps://t.co/y7ldRiCZRC\n\nPrompt engineering\nhttps://t.co/wGkkT9tlAO\n\nSubagents (parallel work)\nhttps://t.co/Govs5sjHB0\n\nHooks (checks that can say no)\nhttps://t.co/YigRzFmXr3\n\nCLAUDE.md + memory\nhttps://t.co/EzV1u4QdQd\n\nSkills\nhttps://t.co/c8RGkxgGCt\n\nMCP\nhttps://t.co/tR6oTaM1QK\n\nLangGraph (graphs of agents)\nhttps://t.co/iKq99402hN\n\nKarpathy's autoresearch (an agent in a loop)\nhttps://t.co/gEMaSZMoYc\n\nAll of this costs $0\n\n95% will spend the agentic period scrolling AI threads. The 5% who ship agents will own the companies that come out of it\n\nBookmark it and start with the first link tonight\n\nThen read how to make an agent that works for hours without you in the Loops & Graphs guide below ↓",
+                "url": "https://x.com/HoodieFade_/status/2119824593753956844",
+                "source": "@HoodieFade_",
+                "date": "Mon Nov 09 16:09:02 +0000 2026",
+                "metrics": {
+                  "favorites": 7040,
+                  "retweets": 1372,
+                  "views": "1172061"
+                }
+              },
+              {
+                "title": "THIS IS ACTUAL F*CKING GOLD",
+                "summary": "THIS IS ACTUAL F*CKING GOLD\n\nAnthropic just shared one of the best tricks for Claude Code.\n\nThe idea: run Sonnet, Haiku and Opus 5.5 together, each one doing only the job it's best at.\n\nOpus-level judgment on every big call, without paying Opus rates for every routine turn.\n\nYou just launch Claude Code like this:\n\nclaude --model sonnet --advisor opus\n\nhere's the split:\n\n→ Sonnet 5.5 runs the session and writes the code\n→ Haiku 5.5 explores files and docs in parallel\n→ Opus 5.5 stays on call as advisor for the big calls\n→ you stop spending Opus on work that doesn't need it\n\nOpus only steps in at three moments:\n\n→ before a plan locks\n→ when the same error shows up twice\n→ before calling it done\n\nSonnet builds. Haiku explores. Opus reviews.\n\nJEV engineering is the same move one layer down: the forks that need no thinker (which file, which tool, retry or stop) go to JEV in milliseconds, and the big models only see the ones that split\n\nthe full tree\n> Sonnet 5.5 runs the main session and edits code\n> search maps the repo on Haiku 5.5\n> grep finds call sites on Haiku 5.5\n> docs pulls the API reference on Haiku 5.5\n> Opus 5.5 on call as advisor, reads the whole transcript when consulted\n> JEV routes micro-forks in milliseconds\n\npaste the tree and this prompt into Claude Code ↓\n\n\"Rebuild my Claude Code setup around this tree:\n1. Run the main session on Sonnet 5.5 with Opus 5.5 as advisor.\n2. Create three read-only Haiku 5.5 subagents: search (maps the repo), grep (finds call sites), docs (pulls the API reference).\n3. Add one rule to CLAUDE.md: consult the advisor before locking a plan, after the same error twice, and before calling a task done.\n4. Route fast deterministic forks (tool choice, path selection, retries) through JEV.\nShow me every change as a diff first. No edits until I say go.\"\n\n↳ https://t.co/bsYb2K5H9G\n\nsave it, you'll use this every single day.",
+                "url": "https://x.com/xsmryze/status/2118087892354449537",
+                "source": "@xsmryze",
+                "date": "Wed Nov 04 21:08:00 +0000 2026",
+                "metrics": {
+                  "favorites": 1305,
+                  "retweets": 112,
+                  "views": "192041"
+                }
+              },
+              {
+                "title": "this is f*cking insane... Boris Cherny's team at Anthropic just shared 94 Claude plugins and skills for free. ALL OF THE",
+                "summary": "this is f*cking insane... Boris Cherny's team at Anthropic just shared 94 Claude plugins and skills for free. ALL OF THEM\n\none answers your emails. one chases clients who didn't pay. one finds the trap in your contract. one fixes your code while you sleep\n\n55 plugins for Claude Code\n20 plugins for real jobs: sales, legal, finance, marketing\n19 skills: Excel, PowerPoint, PDF, Word and more\n\n269,000 GitHub stars between them. agencies charge $300-1,500 to build just one of these. here all 94 cost $0\n\nhow to grab one:\n\n1. open Claude Code and type /plugin\n2. pick the one for the job you hate most\n3. hit install\n4. give it the first task in chat\n\nplugins: https://t.co/Rx8gGKjui4\nwork plugins: https://t.co/KQWmMlhXuy\nskills: https://t.co/Xv9APhlSU2\n\nstart small: one plugin today for the task you repeat every week\n\nplugins are the start. how to build your own AI agents is in the article below ↓",
+                "url": "https://x.com/mika_systems/status/2119152475949441028",
+                "source": "@mika_systems",
+                "date": "Sat Nov 07 19:38:16 +0000 2026",
+                "metrics": {
+                  "favorites": 764,
+                  "retweets": 89,
+                  "views": "54898"
+                }
+              },
+              {
+                "title": "this is the quietest industry shift of the decade. elon musk keeps warning about it: the next decade belongs to whoever ",
+                "summary": "this is the quietest industry shift of the decade. elon musk keeps warning about it: the next decade belongs to whoever runs 500 AIs at once, not whoever builds the smartest one\n\ni did not believe him until my team of 4 quit last month, i had 17 open projects, 2 unpaid invoices, and clients emailing every hour asking where their fucking work was. i was done\n\ninstead of hiring back, i opened claude code and built a company of agents. a CEO agent that reads my email and decides priority. a sales agent that answers leads in under 60 seconds. a support agent that pulls context from every past client. a reporting agent that sends one slack message a day with the 3 decisions i need to make\n\nin 30 days revenue was up 40%. zero employees. 2 meetings a week instead of 22. clients are complimenting response times\n\nthe engineers who make generational money in 2027 are not writing the cleanest code. they are running entire companies off their laptop while sleeping through time zones\n\nfull breakdown of the agent roles, prompts, and the 3 traps that nearly killed my setup is in the article below",
+                "url": "https://x.com/yurshevv/status/2119941447310807214",
+                "source": "@yurshevv",
+                "date": "Mon Nov 09 23:53:22 +0000 2026",
+                "metrics": {
+                  "favorites": 361,
+                  "retweets": 26,
+                  "views": "44068"
+                }
+              },
+              {
+                "title": "this is f*cking insane. you have been googling other people's thinking for 20 years, karpathy's one 5 minute setup gives",
+                "summary": "this is f*cking insane. you have been googling other people's thinking for 20 years, karpathy's one 5 minute setup gives you a google that only searches your own, and you have never once installed it\n\nandrej karpathy pulled 16M views on one idea: stop using AI to write code, use it to build a second brain\n\nevery article you read, every podcast you heard, every meeting you took, every dm thread you had, every tweet you drafted, all of it searchable in one line forever\n\nthe people running it today do not open chatgpt anymore. they open their own search bar. and their search bar has 11 years of their own thinking in it\n\nthe stack:\n\n→ brew install obsidian, mkdir ~/vault, cd ~/vault\n\n→ open claude code in that folder, type \"init CLAUDE.md as the rules, /raw for sources, /wiki for your pages\"\n\n→ drop any file into /raw (transcript, pdf, screenshot, meeting notes). type one word: ingest\n\n→ claude writes a wiki page, links it to 5 existing ones, updates CLAUDE.md with any new pattern it caught about how you think\n\n→ never open a blank chat again. every question goes through the vault. every answer cites your own sources with dates and links\n\n5 minutes to wire. runs forever on the laptop already in front of you\n\nthe alpha most people miss:\n\n> search your own vault in one line and the answer cites 5 of your own past notes with dates. google cites strangers. your vault cites you\n\n> every ingest adds cross-links to 5 past pages automatically. after 90 days your vault answers questions you forgot you had\n\n> CLAUDE.md learns how you argue, what you change your mind on, what you avoid saying. after month 3 it drafts posts in your voice better than you can at 2am\n\n> flip two flags and it runs on local llama. zero API bill, zero vendor lock, your thinking never leaves the box\n\n> compounds for 10 years. after year 3 your vault knows more about what you believe than you do. year 5 and recruiters start asking you to publish parts of it\n\nthe ugly part most will scroll past:\n\nyour coworker started this on a saturday in february\n\nby august his tweets landed 4x your engagement on the exact same topics\n\nby october his first draft of any doc was already better than your third\n\nthe gap is one 5 minute install and 90 days of ingesting what you already consume for free\n\nbookmark this. full step-by-step a-z guide in the article below",
+                "url": "https://x.com/mojeskoqq/status/2117710421629231259",
+                "source": "@mojeskoqq",
+                "date": "Tue Nov 03 20:08:04 +0000 2026",
+                "metrics": {
+                  "favorites": 427,
+                  "retweets": 37,
+                  "views": "44462"
+                }
+              },
+              {
+                "title": "This is f*cking insane. Boris Cherny, the man who built Claude Code, was asked if people should still learn to code. His",
+                "summary": "This is f*cking insane. Boris Cherny, the man who built Claude Code, was asked if people should still learn to code. His answer:\n\n\"In a year or two, it's not going to matter\"\n\nIn 73 seconds, he explains what to do instead: play with the AI tools, learn them, don't be scared of them, stay on the frontier\n\nOn his team, everyone codes now. The PM, the designer, even the finance guy\n\nHe hasn't edited a single line of code by hand since last November. He ships 10 to 30 pull requests a day\n\nWriting Code → Prompting → Agents → Harness → Loops → Everyone on the Team Ships\n\nClaude Code is a harness: the tools, memory, rules and loops around the model. His team changes it with every new model and cut 80% of its system prompt\n\nSave this before it disappears from your feed\n\nEvery doc, guide and repo below is free:\n\nClaude Code best practices\nhttps://t.co/GbmXiaEIDd\n\nEffective harnesses for long-running agents\nhttps://t.co/xrtGydQVJY\n\nBuilding effective agents\nhttps://t.co/AlmLkMTGu2\n\nClaude Code docs\nhttps://t.co/HD2f3EEFmE\n\nMemory: how Claude remembers your project\nhttps://t.co/nozmp2WL3o\n\nCustom subagents\nhttps://t.co/VKlbDuol0B\n\nHooks: rules the agent can't skip\nhttps://t.co/qsDseCAMX5\n\nSkills\nhttps://t.co/5bEJ0arUGo\n\nRun Claude Code on a schedule\nhttps://t.co/JolCHBKW2p\n\nFree course: Claude Code in Action\nhttps://t.co/Dd0MnjEGSn\n\nClaude Code on GitHub\nhttps://t.co/PLMi4HwjFu\n\nClaude Code inside your PRs and issues\nhttps://t.co/YuA7O7ENw2\n\nBuild your own agent on the same harness\nhttps://t.co/JidFNfxArL\n\nThe best Claude Code resources in one list\nhttps://t.co/BeOsrePwHY\n\nPlugins, agents and skills for Claude Code\nhttps://t.co/snrWwfOncP\n\nHe compares it to the printing press. Writing went from a few scribes to everyone. Building software is next\n\n95% will keep asking whether to learn to code, the 5% who build a harness will ship 30 pull requests a day\n\nBookmark it and read the first link tonight\n\nThen use the guide below to build your harness before everyone else does ↓",
+                "url": "https://x.com/0xSanabi/status/2119496647600140432",
+                "source": "@0xSanabi",
+                "date": "Sun Nov 08 18:25:53 +0000 2026",
+                "metrics": {
+                  "favorites": 1132,
+                  "retweets": 196,
+                  "views": "206680"
+                }
+              },
+              {
+                "title": "I don't know why everyone is still not doing this. For this animation I earned $350, and I only needed a phone",
+                "summary": "I don't know why everyone is still not doing this. For this animation I earned $350, and I only needed a phone\n\nWeekly earnings: $4200\nTime spent: 2 hours\nCosts: $100/month\n\nThe funniest part is that by the time the money hits my account, I don't even remember doing this order\n\nWhile I am busy with my own business, walking, or relaxing, a swarm of autonomous agents based on Claude AI works for me\n\nThe whole chain looks like an ideal pipeline without human participation:\n\n1. Order acceptance: The agent monitors platforms, catches incoming task descriptions from clients, and instantly coordinates details\n2. Analysis and planning: Claude breaks down the task into micro-modules, selects the necessary tools and scripts\n3. Generation: The agents write the code themselves, render the graphics, and create finished animations\n4. Project delivery: The client gets an ideal result, and the system sends me a report and records the profit\n\nExpress guide: How to launch agents on autopilot\n\n1. Base and access: You connect Claude AI / Claude Code to an environment with basic scripts for graphics generation\n2. Request intake: You set up a manager agent (for example, via a bot) that catches task descriptions from clients and coordinates details using ready-made templates\n3. Auto-production: Claude itself assembles the project according to the task: writes the code, renders the animation, and checks the result\n4. Delivery and payment: The system sends the finished work to the client and accepts the money. Your role is only to control the balance\n\nDetailed instructions on how to create autonomous agents can be found in the article below",
+                "url": "https://x.com/Bober_smart/status/2120135013186375682",
+                "source": "@Bober_smart",
+                "date": "Tue Nov 10 12:42:32 +0000 2026",
+                "metrics": {
+                  "favorites": 65,
+                  "retweets": 1,
+                  "views": "2288"
+                }
+              },
+              {
+                "title": "It's f*cking wild: Google, Cloudflare, Obsidian's CEO and the guy building Claude Code all put their AI configs on GitHu",
+                "summary": "It's f*cking wild: Google, Cloudflare, Obsidian's CEO and the guy building Claude Code all put their AI configs on GitHub for free, and most people are still starting from zero\n\n1. Matt Pocock's skills · 318K stars\n18M+ installs. the exact folder of AI instructions he uses every day: tests first, clear specs, real reviews\nhttps://t.co/AmtWH9JDco\n\n2. Addy Osmani's skills · 92K stars\nengineering skills from the guy working on Claude Code at Anthropic\nhttps://t.co/1f2tlQ4NO0\n\n3. Cloudflare's audit · 63.9K stars\nthe starting point of what now scans 128 of Cloudflare's own repos. one team of agents hunts for bugs, another tries to prove them wrong\nhttps://t.co/qCsWTtnkUq\n\n4. Obsidian CEO's skills · 51K stars\nteaches any AI to write real Obsidian notes instead of messy text\nhttps://t.co/SG7k1XpYrK\n\n5. Google's goldfish · 14.8K stars\n2 weeks old. the plugin Google's own engineers use to catch AI coding mistakes. the agent writes a design doc, then fresh AI sessions that never saw it try to tear it apart\nhttps://t.co/mJQYjqMlFb\n\nthe biggest teams in tech already stopped writing prompts from zero. their configs are one click away\n\nsave it and steal one tonight",
+                "url": "https://x.com/danikkk_wqs/status/2119535297541070962",
+                "source": "@danikkk_wqs",
+                "date": "Sun Nov 08 20:59:28 +0000 2026",
+                "metrics": {
+                  "favorites": 3956,
+                  "retweets": 386,
+                  "views": "417376"
+                }
+              },
+              {
+                "title": "ESTO ES UNA PASADA",
+                "summary": "ESTO ES UNA PASADA\n\nHan subido a GitHub un repo que te deja usar Claude Code GRATIS y PARA SIEMPRE\n\nRedirige todas tus peticiones a 49 proveedores gratuitos, como DeepSeek o Kimi\n\n1.300 millones de tokens gratis cada mes\n\nLo tienes configurado en 5 minutos\n\nYa supera las 46.000 estrellas y miles de devs lo están usando ahora mismo",
+                "url": "https://x.com/lucass0x/status/2119847437187616870",
+                "source": "@lucass0x",
+                "date": "Mon Nov 09 17:39:48 +0000 2026",
+                "metrics": {
+                  "favorites": 4203,
+                  "retweets": 349,
+                  "views": "279990"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_clarify_missing_topic",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_missing_topic",
+        "difficulty": "medium",
+        "what_it_tests": "Có timeframe nhưng thiếu chủ đề cụ thể → clarify text, không bịa query."
+      },
+      "input": "Tìm tin tức tuần này giúp mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn muốn tìm tin tuần này về chủ đề gì? (ví dụ: AI, công nghệ, kinh tế, chứng khoán, bóng đá...)",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn muốn tìm tin tuần này về chủ đề gì? (ví dụ: AI, công nghệ, kinh tế, chứng khoán, bóng đá...)",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn muốn tìm tin tuần này về chủ đề gì? (ví dụ: AI, công nghệ, kinh tế, chứng khoán, bóng đá...)",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_out_of_scope_recipe",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_recipe",
+        "difficulty": "easy",
+        "what_it_tests": "Yêu cầu nấu ăn ngoài research/news → no_tool, từ chối."
+      },
+      "input": "Viết giúp mình công thức nấu phở bò truyền thống từng bước.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Món này nằm ngoài phạm vi mình hỗ trợ (mình chỉ làm nghiên cứu: tin web, bài mạng xã hội, đọc URL, format digest, gửi Telegram). Bạn có thể hỏi mình về các chủ đề đó nhé.",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G05_fetch_then_format_brief",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "fetch_plus_format",
+        "difficulty": "hard",
+        "what_it_tests": "Có URL + yêu cầu format brief → fetch đúng link rồi format(template=brief); eval không phụ thuộc thứ tự."
+      },
+      "input": "Đọc bài này rồi format thành bản tin brief: https://deepmind.google/discover/blog/",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://deepmind.google/discover/blog/"
+            }
+          },
+          {
+            "name": "format",
+            "args": {
+              "template": "brief"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://deepmind.google/discover/blog/"
+            }
+          },
+          {
+            "name": "format",
+            "args": {
+              "items": [
+                {
+                  "title": "DeepMind Blog",
+                  "url": "https://deepmind.google/discover/blog/",
+                  "source": "Google DeepMind",
+                  "summary": "Trang blog chính thức của Google DeepMind (nội dung sẽ được cập nhật sau khi đọc trang)."
+                }
+              ],
+              "template": "brief",
+              "headline": "Bản tin brief: Google DeepMind Blog"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://deepmind.google/discover/blog/"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://deepmind.google/discover/blog/",
+            "items": [
+              {
+                "title": "News — Google DeepMind",
+                "url": "https://deepmind.google/discover/blog/",
+                "source": "deepmind.google",
+                "summary": "[Skip to main content](https://deepmind.google/blog/#page-content)\n\n# News\n\nDiscover our latest AI breakthroughs, projects, and updates\n\n[Learn more](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n### Gemini 4 Carbon is now available\n\nNovember 2026Models\n\n[Learn more](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n![](https://lh3.googleusercontent.com/HyFmD_pBxwQfRWbzB8-ujWBXIyK5Rfw80wj7dNrS9mPJ7jSujWuaiEOSz92KZhRomh1yGpTYUHiYi3XVyDgrH0QxcwB_PJJUD0Y-PXSPMTNPd9Bw=w2464-h2464-n-nu)\n\n[Learn more](https://deepmind.google/blog/gemini-robotics-2-5-accelerates-real-world-physical-intelligence/)\n\n### Gemini Robotics 2.5 accelerates real-world general dexterity\n\nNovember 2026Models\n\n[Learn more](https://deepmind.google/blog/gemini-robotics-2-5-accelerates-real-world-physical-intelligence/)\n\n![](https://lh3.googleusercontent.com/cZ5L3wcNLzIUFPS_4ZfXs4U_p7V2vBd7s-44XyMZkYJ4_ncAHh_Utzu1neFHdDhbHZU202fS_aXLXUabVF9yyfvIMzy1PWqJcGuc7xOkERHx0iCY=w704-h704-n-nu)\n\n[Learn more](https://deepmind.google/blog/introducing-alphaproof-code/)\n\n### Introducing AlphaProof Code: a breakthrough in verifying complex software at depth\n\nNovember 2026Research\n\n[Learn more](https://deepmind.google/blog/introducing-alphaproof-code/)\n\n![](https://lh3.googleusercontent.com/_RM48tZHFT0P26BSAt9qEVu7zL340BcO1-Vh1dXVEyTUAL8eyWFuz1JeFqztDASB7dQNDJPe-62fAieZA0pVS7_TaY-QZo_DfF_D856OJIrWtZ5k3g=w704-h704-n-nu)\n\n[Learn more](https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n### Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips\n\nNovember 2026\n\n[Learn more](https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n![](https://lh3.googleusercontent.com/KIpRmnVYpYhw0qTIyqHQmsbmT0jXKOgOUUkAWmGCMxp7-uGv_cKhXwjAwze4dskL6VPT-nWQbtDhpfb5rYOb1JGX6C27kFmgip3WvmW_DzeownbuxA=w704-h704-n-nu)![](https://lh3.googleusercontent.com/zA-umsTimZwYl-TVxL53QEOIb6Ml5-VVHmjPgdOh7Gq9zQxMAsCrzlyROKMpXHBsROU-wuQvUeMxyfrNXopp-y_XuIUdcwayv4Ti8L2JpQOC79N6KA=w704-h704-n-nu)\n\n[Learn more](https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/)\n\n### Agentic cheminformatics with Google Antigravity\n\nNovember 2026Science\n\n[Learn more](https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/)\n\n[Learn more](https://deepmind.google/blog/speeding-up-planning-decisions-with-ai/)\n\n### Speeding up planning decisions with AI\n\nOctober 2026Responsibility & Safety\n\n[Learn more](https://deepmind.google/blog/speeding-up-planning-decisions-with-ai/)\n\n![](https://lh3.googleusercontent.com/jtR8kCh_ettxIC6e5pBrmFfd70t6nX2catsIpZz1VgXxb5Nei4APCtTyvDa5M-ZZRGDIXx-OW3bsOR_qYCR35VkxVsKJRsDoOc1pVA6JvqSEgRLsUg=w704-h704-n-nu)\n\n[Learn more](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n### Gemini 4 Carbon: Our next frontier model\n\nOctober 2026Models\n\n[Learn more](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/?utm_source=deepmind.google&utm_medium=referral&utm_campaign=gdm&utm_content=)\n\n![](https://lh3.googleusercontent.com/zXzTL4NBkrbcxxrUzCZxpGgeZVBSt8sn8otKzDprdA2M-ADmx4a0I1mhPUaaSxeszCDOjCXv1zUJM7ug6LMevVGjSoBM5MOqWF4cAzv5AAuPmkzYgQ=w704-h704-n-nu)\n\n[Learn more](https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/)\n\n### Genie 4: A new generation of world simulation\n\nOctober 2026Models\n\n[Learn more](https://deepmind.google/blog/genie-4-a-new-generation-of-"
+              }
+            ]
+          }
+        },
+        {
+          "tool": "format",
+          "args": {
+            "items": [
+              {
+                "title": "DeepMind Blog",
+                "url": "https://deepmind.google/discover/blog/",
+                "source": "Google DeepMind",
+                "summary": "Trang blog chính thức của Google DeepMind (nội dung sẽ được cập nhật sau khi đọc trang)."
+              }
+            ],
+            "template": "brief",
+            "headline": "Bản tin brief: Google DeepMind Blog"
+          },
+          "result": {
+            "tool": "render_digest",
+            "template": "brief",
+            "markdown": "**Bản tin brief: Google DeepMind Blog**\n\n- Trang blog chính thức của Google DeepMind (nội dung sẽ được cập nhật sau khi đọc trang). - [Google DeepMind](https://deepmind.google/discover/blog/)",
+            "item_count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_datetime_then_lookup_chain",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_datetime_then_lookup",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: '3 ngày gần đây' → datetime_window(timeframe tiếng Việt) rồi chain lookup tin chip AI; không bỏ bước chuẩn hoá."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mình muốn tin về chip AI trong 3 ngày gần đây."
+        },
+        {
+          "role": "user",
+          "content": "Nhớ chuẩn hoá khung '3 ngày gần đây' trước đã."
+        },
+        {
+          "role": "user",
+          "content": "Sau đó dùng cửa sổ đó để lookup tin tức chip AI trên web."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "3 ngày gần đây"
+            }
+          },
+          {
+            "name": "lookup",
+            "args": {
+              "query": "chip AI",
+              "topic": "news"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "3 ngày gần đây"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "missing tool call lookup"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "datetime_window",
+          "args": {
+            "timeframe": "3 ngày gần đây"
+          },
+          "result": {
+            "start": "2026-11-07T18:23:51.284216+00:00",
+            "end": "2026-11-10T18:23:51.284216+00:00",
+            "label": "3 ngày gần đây",
+            "duration_days": 3.0,
+            "timeframe_code": "3d"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_confirm_then_send",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_confirm_then_send",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi user đã xác nhận gửi → latest turn gọi send(confirmed=true), không clarify lại."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng lên Telegram nội dung: Tóm tắt AI ngày 10/11 — DeepMind có blog mới."
+        },
+        {
+          "role": "user",
+          "content": "Có, mình xác nhận gửi đúng nội dung đó."
+        },
+        {
+          "role": "user",
+          "content": "Gửi đi với confirmed=true nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "text": "Tóm tắt AI ngày 10/11 — DeepMind có blog mới.",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "send",
+          "args": {
+            "text": "Tóm tắt AI ngày 10/11 — DeepMind có blog mới.",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "send_telegram",
+            "error": "RuntimeError",
+            "message": "Missing TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID env var"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_timeframe_correction_week",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_timeframe_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Sửa timeframe tháng→tuần, giữ chủ đề chip bán dẫn → lookup timeframe=week."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin chip bán dẫn tháng này có gì?"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, chỉ tuần này thôi."
+        },
+        {
+          "role": "user",
+          "content": "Vẫn chủ đề chip bán dẫn, topic news"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "chip bán dẫn",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "tuần này"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "missing tool call lookup",
+          "extra tool call datetime_window"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "datetime_window",
+          "args": {
+            "timeframe": "tuần này"
+          },
+          "result": {
+            "start": "2026-11-09T00:00:00+00:00",
+            "end": "2026-11-10T18:23:53.300174+00:00",
+            "label": "tuần này",
+            "duration_days": 1.7666,
+            "timeframe_code": "7d"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09_clarify_topic_then_lookup",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_fill_missing_topic",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi bổ sung topic quantum computing + giữ tuần này → lookup đúng query/topic/timeframe."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin tức tuần này giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Chủ đề là quantum computing"
+        },
+        {
+          "role": "user",
+          "content": "Giữ timeframe tuần này, topic news"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "quantum computing",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "datetime_window",
+            "args": {
+              "timeframe": "tuần này"
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call lookup",
+          "extra tool call datetime_window"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "datetime_window",
+          "args": {
+            "timeframe": "tuần này"
+          },
+          "result": {
+            "start": "2026-11-09T00:00:00+00:00",
+            "end": "2026-11-10T18:23:53.812856+00:00",
+            "label": "tuần này",
+            "duration_days": 1.7666,
+            "timeframe_code": "7d"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_switch_search_to_timeline",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_to_timeline",
+        "difficulty": "hard",
+        "what_it_tests": "Chuyển từ social_search chủ đề sang timeline account Demis Hassabis, limit=5, map handle demishassabis."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mọi người đang nói gì về Demis Hassabis trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Bỏ search chủ đề, lấy tweet của chính Demis Hassabis"
+        },
+        {
+          "role": "user",
+          "content": "Lấy 5 tweet mới nhất của account đó"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "demishassabis",
+              "limit": 5
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "demishassabis",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": "",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "demishassabis",
+            "limit": 5
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "demishassabis",
+            "items": [
+              {
+                "title": "Our latest frontier model Gemini 4 Carbon is rolling out today! Amazing progress from Gemini 3 → Gemini 4 in less than a",
+                "summary": "Our latest frontier model Gemini 4 Carbon is rolling out today! Amazing progress from Gemini 3 → Gemini 4 in less than a year… Carbon reverse engineers my original Theme Park binaries, adds a new DeepMind themed ride, and ports it to the web in one shot - kind of mindblowing to see! https://t.co/LceQuUZbTk",
+                "url": "https://x.com/demishassabis/status/2120210297948696997",
+                "source": "@demishassabis",
+                "date": "Tue Nov 10 17:41:41 +0000 2026",
+                "metrics": {
+                  "favorites": 568,
+                  "retweets": 47,
+                  "views": "35527"
+                }
+              },
+              {
+                "title": "more info here, happy building! https://t.co/kFmdnLde9o",
+                "summary": "more info here, happy building! https://t.co/kFmdnLde9o",
+                "url": "https://x.com/demishassabis/status/2120210299643208084",
+                "source": "@demishassabis",
+                "date": "Tue Nov 10 17:41:41 +0000 2026",
+                "metrics": {
+                  "favorites": 89,
+                  "retweets": 7,
+                  "views": "9476"
+                }
+              },
+              {
+                "title": "RT @GoogleDeepMind: Gemini Robotics 2.5 is here. 🤖",
+                "summary": "RT @GoogleDeepMind: Gemini Robotics 2.5 is here. 🤖\n\nOur latest physical AI is able to learn hundreds of everyday skills - from folding laun…",
+                "url": "https://x.com/demishassabis/status/2120200299608776819",
+                "source": "@demishassabis",
+                "date": "Tue Nov 10 17:01:57 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 302,
+                  "views": "3276"
+                }
+              },
+              {
+                "title": "RT @pushmeet: Announcing a major milestone achieved by my team @GoogleDeepMind: we have proven key security properties o",
+                "summary": "RT @pushmeet: Announcing a major milestone achieved by my team @GoogleDeepMind: we have proven key security properties of the machine code…",
+                "url": "https://x.com/demishassabis/status/2120197387415408751",
+                "source": "@demishassabis",
+                "date": "Tue Nov 10 16:50:23 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 439,
+                  "views": "4546"
+                }
+              },
+              {
+                "title": "RT @sundarpichai: Four distinct TPU systems in a single generation in one year! Instead of waiting years for a tradition",
+                "summary": "RT @sundarpichai: Four distinct TPU systems in a single generation in one year! Instead of waiting years for a traditional semiconductor cy…",
+                "url": "https://x.com/demishassabis/status/2119890726675005913",
+                "source": "@demishassabis",
+                "date": "Mon Nov 09 20:31:49 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 354,
+                  "views": "5632"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
