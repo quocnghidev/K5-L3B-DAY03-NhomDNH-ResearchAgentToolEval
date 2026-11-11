@@ -32,11 +32,9 @@ python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --ho
 
 **Link dùng thử (deploy):**
 
-> **Khuyến nghị — Render (không cần bật máy):** xem [docs/RENDER-DEPLOY.md](../../docs/RENDER-DEPLOY.md)  
-> `render.yaml` → Blueprint trên Render → dán `OPENROUTER_API_KEY` (+ Tavily/Firecrawl/RapidAPI) → URL dạng `https://….onrender.com`  
-> _(Sau khi Deploy Live, thay dòng URL dưới bằng link Render thật.)_
+> **Deploy chính — Render (không cần bật máy):** xem [docs/RENDER-DEPLOY.md](../../docs/RENDER-DEPLOY.md)
 >
-> URL Render: _(dán sau khi deploy)_
+> URL: https://dnh-research-agent.onrender.com/
 >
 > **Fallback tạm — Cloudflare Tunnel (cần bật máy):**
 > ```bash
@@ -160,7 +158,7 @@ Live C6: chạy 3 kịch bản qua UI API (`scripts/run_c6_live.py` + session th
 |---|---|---|---|
 | Tool mới (`tools/datetime_window/`) | `tool.py`, `TOOL.md`; đăng ký `tools/__init__.py` + `artifacts/tools.yaml`; rule VN trong `system_prompt.md` | Parse timeframe **tiếng Việt** + EN; input xấu/`tz` lỗi → `error` dict | Không raise; trả `error` dict |
 | Unit test tool mới (≥ 3 test/tool) | `tests/test_tools_todo.py` — `datetime_window_*` (+ VN cases) | Offline, không gọi mạng | `pytest`: **0 failed** (stub tool cũ còn skip — bonus) |
-| UI (lệnh chạy + link dùng thử) | `starter_v0/ui/` + transcript B4 + `scripts/run_c6_live.py` | UI Gemini-like cũ + live 3 kịch bản đúng hành vi | `python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --port 8792` · Public: https://referred-michel-reed-inspector.trycloudflare.com/ |
+| UI (lệnh chạy + link dùng thử) | `starter_v0/ui/` + transcript B4 + `scripts/run_c6_live.py` | UI Gemini-like cũ + live 3 kịch bản đúng hành vi | `python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --port 8792` · Public: https://dnh-research-agent.onrender.com/ |
 | Group metric (C5) | `runs/v3_B_group_deepseek_20261111T012607013544.json` | DeepSeek **1.0 / 10 case** | Evidence bằng file; không cần DeepSeek API để chấm |
 
 Tool unit tests: **≥ 3** test cho `datetime_window`. Ví dụ lỗi unit bắt được mà eval routing không bắt: `timeframe=""` hoặc `tz` không phải IANA → trả `{"error": ...}` thay vì exception (eval chỉ chấm tên tool/args, không chấm exception path).

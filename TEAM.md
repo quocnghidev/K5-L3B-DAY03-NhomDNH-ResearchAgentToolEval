@@ -115,5 +115,5 @@ Báo cáo cá nhân: [report/team/2A202603901_LeThanhHa.md](report/team/2A202603
 - `starter_v0/runs/v3_B_group_deepseek_20261111T012607013544.json` — group **1.0**
 - `starter_v0/tools/datetime_window/` + đăng ký + unit test; pytest 0 failed
 - Transcript C6: `v3_openrouter_ui_81a96500eb3d_…`, `…fc7e2e73cb96_…`, `…36347f0e1c8a_…`
-- `report/team/group_report.md` — A1 URL: https://referred-michel-reed-inspector.trycloudflare.com/
+- `report/team/group_report.md` — A1 URL: https://dnh-research-agent.onrender.com/
 - `report/team/2A202603901_LeThanhHa.md`
