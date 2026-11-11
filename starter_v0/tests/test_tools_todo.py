@@ -104,19 +104,66 @@ def test_policy_instruction_like_lines_go_to_untrusted_text() -> None:
     pytest.skip(TODO)
 
 
-# ---------------- YOUR NEW TOOL(S) ----------------
+# ---------------- datetime_window ----------------
 # Write at least 3 tests per tool your team adds:
 #   1. happy path (mocked if it calls an API)
 #   2. bad / missing input from the model (empty string, wrong type, out-of-enum value)
 #   3. failure path (missing key, HTTP error, timeout) -> returns error dict, does not raise
 
-def test_my_new_tool_happy_path() -> None:
-    pytest.skip(TODO)
+datetime_window_tool = TOOL_FUNCTIONS["datetime_window"]
 
 
-def test_my_new_tool_bad_input_from_model() -> None:
-    pytest.skip(TODO)
+def test_datetime_window_happy_path_last_7_days() -> None:
+    result = datetime_window_tool(
+        timeframe="last 7 days",
+        reference_date="2026-11-10T17:00:00",
+        tz="UTC",
+    )
+
+    assert "error" not in result
+    assert result["timeframe_code"] == "7d"
+    assert result["label"] == "last 7 days"
+    assert result["duration_days"] == 7.0
+    assert result["start"] == "2026-11-03T17:00:00+00:00"
+    assert result["end"] == "2026-11-10T17:00:00+00:00"
 
 
-def test_my_new_tool_failure_returns_error_dict() -> None:
-    pytest.skip(TODO)
+def test_datetime_window_vietnamese_tuan_truoc_and_relative_days() -> None:
+    tuan = datetime_window_tool(
+        timeframe="tuần trước",
+        reference_date="2026-11-10T17:00:00",
+        tz="UTC",
+    )
+    assert "error" not in tuan
+    assert tuan["timeframe_code"] == "7d"
+    assert tuan["label"] == "tuần trước"
+
+    days = datetime_window_tool(
+        timeframe="3 ngày gần đây",
+        reference_date="2026-11-10T17:00:00",
+        tz="UTC",
+    )
+    assert "error" not in days
+    assert days["timeframe_code"] == "3d"
+    assert days["label"] == "3 ngày gần đây"
+    assert days["duration_days"] == 3.0
+
+
+def test_datetime_window_bad_input_empty_timeframe() -> None:
+    result = datetime_window_tool(timeframe="")
+
+    assert isinstance(result, dict)
+    assert "error" in result
+    assert "start" not in result
+
+
+def test_datetime_window_failure_returns_error_dict() -> None:
+    bad_tz = datetime_window_tool(timeframe="last 7 days", tz="Not/A_Real_Zone")
+    assert isinstance(bad_tz, dict)
+    assert "error" in bad_tz
+    assert "Timezone" in bad_tz["error"] or "timezone" in bad_tz["error"].lower()
+
+    unparseable = datetime_window_tool(timeframe="sometime soon maybe")
+    assert isinstance(unparseable, dict)
+    assert "error" in unparseable
+    assert "start" not in unparseable
