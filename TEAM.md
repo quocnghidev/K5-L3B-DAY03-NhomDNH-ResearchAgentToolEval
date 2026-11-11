@@ -16,7 +16,7 @@
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Lã Quốc Nghị | 2A202603947 | quocnghidev@gmail.com | quocnghidev | Prompt & tối ưu eval (C1–C3) |
-|   2 | Nguyễn Tiến Đạt | 2A202603922 | _(Đạt điền)_ | _(Đạt điền)_ | Tool mới + unit test + khung UI (C4) |
+|   2 | Nguyễn Tiến Đạt | 2A202603922 | ntdkhongdeptrailam5924@gmail.com | duchosinh4to10 | Tool mới + unit test + khung UI (C4) |
 |   3 | Lê Thanh Hà | 2A202603901 | haroman2808@gmail.com | thanhhale288 | Eval nhóm + live chat + báo cáo + hoàn thiện UI / chốt nộp (C5–C7, hỗ trợ C4) |
 
 ## Cá nhân
