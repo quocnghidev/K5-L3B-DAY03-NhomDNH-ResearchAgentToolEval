@@ -19,8 +19,6 @@
 |   2 | Nguyễn Tiến Đạt | 2A202603922 | _(Đạt điền)_ | _(Đạt điền)_ | Tool mới + unit test + khung UI (C4) |
 |   3 | Lê Thanh Hà | 2A202603901 | haroman2808@gmail.com | thanhhale288 | Eval nhóm + live chat + báo cáo + hoàn thiện UI / chốt nộp (C5–C7, hỗ trợ C4) |
 
-> Đạt tự bổ sung email/GitHub và nội dung báo cáo cá nhân rồi push lên `main`.
-
 ## Cá nhân
 
 Mỗi thành viên đồng thời tạo một báo cáo riêng trong `report/` theo dạng:
@@ -65,8 +63,7 @@ Báo cáo cá nhân: [report/team/2A202603947_LaQuocNghi.md](report/team/2A20260
 
 ## Nguyễn Tiến Đạt — 2A202603922
 
-Báo cáo cá nhân: [report/team/2A202603922_NguyenTienDat.md](report/team/2A202603922_NguyenTienDat.md)  
-_(File placeholder — Đạt tự điền nội dung rồi push lên `main`.)_
+Báo cáo cá nhân: [report/team/2A202603922_NguyenTienDat.md](report/team/2A202603922_NguyenTienDat.md)
 
 ### Phần việc phụ trách
 

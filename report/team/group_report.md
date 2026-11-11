@@ -1,6 +1,7 @@
 # Báo cáo nhóm — Day 03 Research Agent Tool Eval
 
 > Báo cáo gồm 2 phần có hạn khác nhau:
+>
 > - **Phần A (mục 2)** — giới thiệu agent, ngắn gọn 1 trang. **Xong trước Team showdown (16:30)** để team khác hiểu nhanh agent có tool gì, làm được gì. Có thể làm thêm poster `report/team/poster.html` hoặc `poster.svg`.
 > - **Phần B (mục 3–7)** — chi tiết và bằng chứng, dựa trên log thật. Hoàn thiện trước deadline nộp bài.
 >
@@ -37,11 +38,13 @@ python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --ho
 > URL: https://dnh-research-agent.onrender.com/
 >
 > **Fallback tạm — Cloudflare Tunnel (cần bật máy):**
+>
 > ```bash
 > cd starter_v0
 > python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --host 127.0.0.1 --port 8792
 > bash scripts/run_cloudflare_tunnel.sh 8792
 > ```
+>
 > URL tunnel (tạm): https://referred-michel-reed-inspector.trycloudflare.com/
 
 **Evidence group eval (không cần chạy lại):** metric C5 lấy từ run **DeepSeek** đã lưu trong repo — xem mục B3.
@@ -122,8 +125,9 @@ Liệt kê đúng 10 case trong `starter_v0/data/eval_group.json` (5 single turn
 
 > **Evidence C5 — run group hợp lệ (DeepSeek, đã lưu sẵn):**  
 > `starter_v0/runs/v3_B_group_deepseek_20261111T012607013544.json`  
+>
 > - Provider/model: **deepseek / deepseek-chat**  
-> - `provider_error_cases=0`, `measured_cases=10/10`, **`case_accuracy=1.0` (10/10 PASS)**  
+> - `provider_error_cases=0`, `measured_cases=10/10`, `case_accuracy=1.0` **(10/10 PASS)**  
 > - `artifact_version`: `v3+p0251ccb0a331+tc1dfecfdad0c`  
 > Giám khảo **không bắt buộc** cài DeepSeek hay chạy lại eval; đọc file JSON + bảng dưới là đủ.  
 > Run so sánh (không dùng làm metric chính): `v3_B_group_deepseek_20261111T012357255793.json` (0.6 trước khi siết), `v3_B_group_ollama_20261111T011051946135.json` (0.8 local).
@@ -183,8 +187,8 @@ Chỉ điền nếu nhóm làm bonus này.
 | Version | Model (provider) | Prompt/Tools | case_accuracy | tool_routing | argument | multiturn | Run File |
 |---|---|---|---|---|---|---|---|
 | v3 | (cloud) | v3 |  |  |  |  |  |
-| v3-<model> | (ollama) | v3 |  |  |  |  |  |
-| v3-<model> | (ollama) | v3 |  |  |  |  |  |
+| v3-\<model\> | (ollama) | v3 |  |  |  |  |  |
+| v3-\<model\> | (ollama) | v3 |  |  |  |  |  |
 | v4-local |  |  |  |  |  |  |  |
 | v5-local |  |  |  |  |  |  |  |
 
@@ -216,14 +220,14 @@ Chi tiết đóng góp của từng thành viên nằm trong [TEAM.md](../../TEA
 
 - Nghị: [report/team/2A202603947_LaQuocNghi.md](2A202603947_LaQuocNghi.md) — prompt/tools.yaml, v0–v3 base eval, B1/B2
 - Hà: [report/team/2A202603901_LeThanhHa.md](2A202603901_LeThanhHa.md) — eval group 10 case + DeepSeek 1.0; đăng ký/`datetime_window` + unit test + Việt hoá; **UI cũ + live C6 + tunnel + C7**
-- Đạt: [report/team/2A202603922_NguyenTienDat.md](2A202603922_NguyenTienDat.md) — tool `datetime_window` (code ban đầu); file cá nhân đã tạo đúng tên, **nội dung để Đạt điền rồi push `main`**
+- Đạt: [report/team/2A202603922_NguyenTienDat.md](2A202603922_NguyenTienDat.md) — tool `datetime_window` (code ban đầu)
 
 ## 7. Hạn chế và hướng cải thiện — B6. Reflection
 
 - **Fix thuộc `system_prompt.md`:** v1 bỏ đoán/gửi luôn + scope; v3 ép turn đầu send/đăng dùng `clarify(yes_no)` → R12 PASS, base 1.0; rule `datetime_window` cho timeframe mơ hồ (không map thẳng enum).
 - **Fix thuộc `tools.yaml`:** v2 siết description/`response_type`/send boundary/args; sau đó khai báo `datetime_window`.
 - **Evidence live C6 (đã có):** research `lookup`; thiếu handle `clarify`→`timeline`; đăng Telegram `clarify`→`send` — xem B4.
-- **Còn hạn chế:** Telegram thật cần env; UI public phụ thuộc tunnel; báo cáo cá nhân Đạt còn placeholder (Đạt điền + push `main`); stub test tool starter vẫn skip (không ảnh hưởng 0 failed).
+- **Còn hạn chế:** Telegram thật cần env; Render free tier có cold start; báo cáo cá nhân Đạt còn placeholder (Đạt điền + push `main`); stub test tool starter vẫn skip (không ảnh hưởng 0 failed).
 - **Vòng tiếp theo:** Đạt điền `2A202603922_NguyenTienDat.md` + commit kỹ thuật lên `main`; (tuỳ chọn) set `TELEGRAM_*` để bonus gửi thật.
 
 ## 8. Tài liệu tham khảo
