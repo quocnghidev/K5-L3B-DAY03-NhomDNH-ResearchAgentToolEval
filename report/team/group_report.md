@@ -86,7 +86,7 @@ python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --ho
 - **v1 (`system_prompt.md`)**: bỏ chỉ dẫn xấu starter (đoán handle/URL, gửi luôn, một bước); thêm rule `clarify` khi thiếu info, confirm trước `send`, từ chối out-of-scope không gọi tool. Metric 0.65 → 0.85.
 - **v2 (`tools.yaml`)**: viết lại mọi description (khi nào dùng/không dùng); bắt buộc `clarify.response_type`; `send` chỉ khi `confirmed=true` sau xác nhận; convention args (`lookup` query ngắn + `topic`/`timeframe`, handle không `@`, `social_search` vs `timeline`). Metric 0.85 → 0.95.
 - **v3 (`system_prompt.md`)**: turn đầu của send/post/đăng chỉ được `clarify(response_type="yes_no")`, không hỏi nội dung bằng `text` trước confirm. Metric 0.95 → **1.0** (20/20).
-- **Tool mới**: `datetime_window` (Đạt code; đã register vào `tools/__init__.py` + `artifacts/tools.yaml`; thêm rule relative-time trong `system_prompt.md`; ≥3 unit test trong `tests/test_tools_todo.py`). Folder lỗi `tools/dattask/` đã xoá để contract pytest xanh.
+- **Tool mới `datetime_window`:** Đạt khởi tạo code parse timeframe tiếng Anh + `TOOL.md` (upload). Hà đăng ký vào `tools/__init__.py` + `artifacts/tools.yaml`, mở rộng parse tiếng Việt, viết ≥3 unit test, xoá folder lỗi `dattask/`; bổ sung rule relative-time trong prompt/`tools.yaml` phục vụ group eval.
 
 ## 4. Kết quả — PHẦN B: Chi tiết và bằng chứng
 
@@ -216,19 +216,19 @@ Lỗi đặc thù của model nhỏ (đếm từ run JSON):
 
 ## 6. Tổng hợp đóng góp
 
-Chi tiết đóng góp của từng thành viên nằm trong [TEAM.md](../../TEAM.md) và các báo cáo cá nhân:
+Chi tiết đóng góp của từng thành viên nằm trong [TEAM.md](../../TEAM.md), [PHAN_CONG.md](../../PHAN_CONG.md) (kế hoạch + kết quả thực tế) và các báo cáo cá nhân:
 
-- Nghị: [report/team/2A202603947_LaQuocNghi.md](2A202603947_LaQuocNghi.md) — prompt/tools.yaml, v0–v3 base eval, B1/B2
-- Hà: [report/team/2A202603901_LeThanhHa.md](2A202603901_LeThanhHa.md) — eval group 10 case + DeepSeek 1.0; đăng ký/`datetime_window` + unit test + Việt hoá; **UI cũ + live C6 + tunnel + C7**
-- Đạt: [report/team/2A202603922_NguyenTienDat.md](2A202603922_NguyenTienDat.md) — tool `datetime_window` (code ban đầu)
+- Nghị: [report/team/2A202603947_LaQuocNghi.md](2A202603947_LaQuocNghi.md) — prompt/`tools.yaml` vòng base, v0–v3, B1/B2
+- Đạt: [report/team/2A202603922_NguyenTienDat.md](2A202603922_NguyenTienDat.md) — khởi tạo tool `datetime_window` (parse EN + `TOOL.md`)
+- Hà: [report/team/2A202603901_LeThanhHa.md](2A202603901_LeThanhHa.md) — chốt C4 (register/test/VN/xoá `dattask`); eval group 10 case + DeepSeek 1.0; UI + live C6; C7
 
 ## 7. Hạn chế và hướng cải thiện — B6. Reflection
 
-- **Fix thuộc `system_prompt.md`:** v1 bỏ đoán/gửi luôn + scope; v3 ép turn đầu send/đăng dùng `clarify(yes_no)` → R12 PASS, base 1.0; rule `datetime_window` cho timeframe mơ hồ (không map thẳng enum).
-- **Fix thuộc `tools.yaml`:** v2 siết description/`response_type`/send boundary/args; sau đó khai báo `datetime_window`.
+- **Fix thuộc `system_prompt.md`:** v1 bỏ đoán/gửi luôn + scope; v3 ép turn đầu send/đăng dùng `clarify(yes_no)` → R12 PASS, base 1.0; sau đó bổ sung rule `datetime_window` cho timeframe mơ hồ (phục vụ group).
+- **Fix thuộc `tools.yaml`:** v2 siết description/`response_type`/send boundary/args; sau đó khai báo `datetime_window` khi tool đã sẵn sàng.
 - **Evidence live C6 (đã có):** research `lookup`; thiếu handle `clarify`→`timeline`; đăng Telegram `clarify`→`send` — xem B4.
-- **Còn hạn chế:** Telegram thật cần env; Render free tier có cold start; báo cáo cá nhân Đạt còn placeholder (Đạt điền + push `main`); stub test tool starter vẫn skip (không ảnh hưởng 0 failed).
-- **Vòng tiếp theo:** Đạt điền `2A202603922_NguyenTienDat.md` + commit kỹ thuật lên `main`; (tuỳ chọn) set `TELEGRAM_*` để bonus gửi thật.
+- **Còn hạn chế:** Telegram thật cần env; link public (tunnel/Render) có thể cold start / tạm thời; stub test tool starter vẫn skip (không ảnh hưởng `pytest` 0 failed); bài đang trên nhánh `nearly-final` — cần merge sang `main` nếu LMS yêu cầu.
+- **Vòng tiếp theo:** merge/`push` `main` + cập nhật SHA chốt; (tuỳ chọn) `TELEGRAM_*` bonus gửi thật; (tuỳ chọn) dọn `__pycache__` khỏi git tracking.
 
 ## 8. Tài liệu tham khảo
 
