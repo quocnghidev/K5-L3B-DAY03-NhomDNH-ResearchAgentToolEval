@@ -1,0 +1,40 @@
+# Render Blueprint — deploy DNH Research Agent UI (always-on, no local laptop).
+# Dashboard: https://dashboard.render.com → New → Blueprint → chọn repo này.
+#
+# Sau khi tạo service, vào Environment và dán API keys (sync: false = điền tay).
+
+services:
+  - type: web
+    name: dnh-research-agent
+    runtime: python
+    plan: free
+    region: singapore
+    rootDir: starter_v0
+    buildCommand: pip install -r requirements.txt
+    startCommand: bash scripts/start_ui_render.sh
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      - key: UI_PROVIDER
+        value: openrouter
+      - key: UI_MODEL
+        value: openai/gpt-4o-mini
+      - key: UI_VERSION
+        value: v3
+      - key: UI_HOST
+        value: "0.0.0.0"
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: FIRECRAWL_API_KEY
+        sync: false
+      - key: RAPIDAPI_KEY
+        sync: false
+      - key: RAPIDAPI_TWITTER_HOST
+        value: twitter-api45.p.rapidapi.com
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false

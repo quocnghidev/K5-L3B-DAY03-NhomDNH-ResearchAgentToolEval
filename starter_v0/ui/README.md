@@ -17,11 +17,15 @@ python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --ho
 # → http://127.0.0.1:8792
 ```
 
-Public:
+Public tạm (cần bật máy):
 
 ```bash
 bash scripts/run_cloudflare_tunnel.sh 8792
 ```
+
+Public luôn bật (không cần laptop) — **Render**:
+
+Xem [docs/RENDER-DEPLOY.md](../../docs/RENDER-DEPLOY.md). Tóm tắt: push repo → Render Blueprint (`render.yaml`) → dán `OPENROUTER_API_KEY` (+ tool keys) → lấy `https://….onrender.com`.
 
 Live 3 kịch bản C6 (UI đang chạy):
 

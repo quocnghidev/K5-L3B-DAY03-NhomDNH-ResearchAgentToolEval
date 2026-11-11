@@ -32,16 +32,19 @@ python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --ho
 
 **Link dùng thử (deploy):**
 
+> **Khuyến nghị — Render (không cần bật máy):** xem [docs/RENDER-DEPLOY.md](../../docs/RENDER-DEPLOY.md)  
+> `render.yaml` → Blueprint trên Render → dán `OPENROUTER_API_KEY` (+ Tavily/Firecrawl/RapidAPI) → URL dạng `https://….onrender.com`  
+> _(Sau khi Deploy Live, thay dòng URL dưới bằng link Render thật.)_
+>
+> URL Render: _(dán sau khi deploy)_
+>
+> **Fallback tạm — Cloudflare Tunnel (cần bật máy):**
 > ```bash
 > cd starter_v0
 > python3 -m ui --provider openrouter --model openai/gpt-4o-mini --version v3 --host 127.0.0.1 --port 8792
-> # terminal khác:
 > bash scripts/run_cloudflare_tunnel.sh 8792
 > ```
->
-> URL: https://referred-michel-reed-inspector.trycloudflare.com/
->
-> _(Giữ UI + tunnel mở khi demo; URL `trycloudflare.com` đổi mỗi lần tạo tunnel mới.)_
+> URL tunnel (tạm): https://referred-michel-reed-inspector.trycloudflare.com/
 
 **Evidence group eval (không cần chạy lại):** metric C5 lấy từ run **DeepSeek** đã lưu trong repo — xem mục B3.
 

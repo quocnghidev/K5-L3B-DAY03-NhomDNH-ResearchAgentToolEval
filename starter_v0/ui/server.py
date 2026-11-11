@@ -426,7 +426,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--history-window", type=int, default=5)
     parser.add_argument("--max-tool-rounds", type=int, default=4)
     parser.add_argument("--host", default=os.getenv("UI_HOST", "0.0.0.0"))
-    parser.add_argument("--port", type=int, default=int(os.getenv("UI_PORT", "8792")))
+    # Render/Railway set PORT; local default UI_PORT or 8792.
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=int(os.getenv("PORT") or os.getenv("UI_PORT", "8792")),
+    )
     args = parser.parse_args(argv)
 
     _bootstrap(args)
