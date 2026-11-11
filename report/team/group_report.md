@@ -215,15 +215,15 @@ Chi tiết đóng góp của từng thành viên nằm trong [TEAM.md](../../TEA
 
 - Nghị: [report/team/2A202603947_LaQuocNghi.md](2A202603947_LaQuocNghi.md) — prompt/tools.yaml, v0–v3 base eval, B1/B2
 - Hà: [report/team/2A202603901_LeThanhHa.md](2A202603901_LeThanhHa.md) — eval group 10 case + DeepSeek 1.0; đăng ký/`datetime_window` + unit test + Việt hoá; **UI cũ + live C6 + tunnel + C7**
-- Đạt: tool `datetime_window` (code ban đầu) — báo cáo cá nhân Đạt **chưa** có file `MSSV_HoTen.md` (rủi ro C8)
+- Đạt: [report/team/2A202603922_NguyenTienDat.md](2A202603922_NguyenTienDat.md) — tool `datetime_window` (code ban đầu); file cá nhân đã tạo đúng tên, **nội dung để Đạt điền rồi push `main`**
 
 ## 7. Hạn chế và hướng cải thiện — B6. Reflection
 
 - **Fix thuộc `system_prompt.md`:** v1 bỏ đoán/gửi luôn + scope; v3 ép turn đầu send/đăng dùng `clarify(yes_no)` → R12 PASS, base 1.0; rule `datetime_window` cho timeframe mơ hồ (không map thẳng enum).
 - **Fix thuộc `tools.yaml`:** v2 siết description/`response_type`/send boundary/args; sau đó khai báo `datetime_window`.
 - **Evidence live C6 (đã có):** research `lookup`; thiếu handle `clarify`→`timeline`; đăng Telegram `clarify`→`send` — xem B4.
-- **Còn hạn chế:** Telegram thật cần env; UI public phụ thuộc tunnel; C8 thiếu báo cáo Đạt; stub test tool starter vẫn skip (không ảnh hưởng 0 failed).
-- **Vòng tiếp theo:** bổ sung báo cáo Đạt; (tuỳ chọn) set `TELEGRAM_*` để bonus gửi thật; siết thêm prompt nếu muốn mọi wording thiếu-handle đều gọi `clarify`.
+- **Còn hạn chế:** Telegram thật cần env; UI public phụ thuộc tunnel; báo cáo cá nhân Đạt còn placeholder (Đạt điền + push `main`); stub test tool starter vẫn skip (không ảnh hưởng 0 failed).
+- **Vòng tiếp theo:** Đạt điền `2A202603922_NguyenTienDat.md` + commit kỹ thuật lên `main`; (tuỳ chọn) set `TELEGRAM_*` để bonus gửi thật.
 
 ## 8. Tài liệu tham khảo
 

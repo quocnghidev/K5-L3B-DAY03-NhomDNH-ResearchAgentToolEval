@@ -7,8 +7,8 @@
 - Repo nhóm: `K5-L3B-DAY03-NhomDNH-ResearchAgentToolEval`
 - URL repo, nhánh nộp, commit chốt:
   - URL: https://github.com/quocnghidev/K5-L3B-DAY03-NhomDNH-ResearchAgentToolEval
-  - Nhánh nộp: `nearly-final` (merge vào `main` khi Đạt xong phần còn lại)
-  - Commit chốt hiện tại: `de1fbbc63471e64fe6addd8878018a56cb518f45`
+  - Nhánh nộp: `nearly-final` (merge vào `main` khi Đạt điền báo cáo cá nhân + push)
+  - Commit chốt hiện tại: _(cập nhật sau khi push)_
 - Chi tiết phân công theo timeline: xem [PHAN_CONG.md](PHAN_CONG.md)
 
 ## Thành viên
@@ -16,10 +16,10 @@
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Lã Quốc Nghị | 2A202603947 | quocnghidev@gmail.com | quocnghidev | Prompt & tối ưu eval (C1–C3) |
-|   2 | Đạt | _(điền)_ | _(điền)_ | _(điền)_ | Tool mới + unit test + khung UI (C4) |
+|   2 | Nguyễn Tiến Đạt | 2A202603922 | _(Đạt điền)_ | _(Đạt điền)_ | Tool mới + unit test + khung UI (C4) |
 |   3 | Lê Thanh Hà | 2A202603901 | haroman2808@gmail.com | thanhhale288 | Eval nhóm + live chat + báo cáo + hoàn thiện UI / chốt nộp (C5–C7, hỗ trợ C4) |
 
-> Mỗi thành viên tự bổ sung họ tên đầy đủ, MSSV, email, GitHub trước khi nộp.
+> Đạt tự bổ sung email/GitHub và nội dung báo cáo cá nhân rồi push lên `main`.
 
 ## Cá nhân
 
@@ -63,7 +63,10 @@ Báo cáo cá nhân: [report/team/2A202603947_LaQuocNghi.md](report/team/2A20260
 
 ---
 
-## Đạt - 2A202603922
+## Nguyễn Tiến Đạt — 2A202603922
+
+Báo cáo cá nhân: [report/team/2A202603922_NguyenTienDat.md](report/team/2A202603922_NguyenTienDat.md)  
+_(File placeholder — Đạt tự điền nội dung rồi push lên `main`.)_
 
 ### Phần việc phụ trách
 
@@ -82,7 +85,7 @@ Báo cáo cá nhân: [report/team/2A202603947_LaQuocNghi.md](report/team/2A20260
 
 - Folder tool mới (`tools/datetime_window/`) + `TOOL.md`
 - Output lệnh `pytest` (0 failed; ≥ 3 test tool mới không skip)
-- Commit kỹ thuật trên nhánh `main`
+- Commit kỹ thuật trên nhánh `main` (Đạt tự ghi SHA khi push)
 
 ---
 
